@@ -59,3 +59,14 @@ What?
 
 사용자가 주차할 주차장에 자리가 있는 경우 찜을 할 수 있으며, 찜을 한 경우 제한시간(아직 불확실) 이내에 입차를 하지 않을 경우 timeout 으로
 찜이 자동 취소되는 기능
+
+<h2>Module</h2>
+
+<h3>Api</h3>
+역할 : Controller, useCase, Service, Port 등 외부의 응답이 들어오거나 나가는 역할을 한다
+
+<h3>Domain</h3>
+역할 : Domain을 정의하고 domain에 business logic을 관리한다
+
+<h3>Persitence</h3>
+역할 : DB, Redis 등 SQL과 관련된 정보를 설정 및 관리한다.
