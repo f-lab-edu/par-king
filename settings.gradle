@@ -1,2 +1,5 @@
 rootProject.name = 'par-king'
-include 'par-king-api'
+include 'api'
+include 'domain'
+include 'persistence'
+
