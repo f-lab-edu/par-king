@@ -1,4 +1,4 @@
-package parking.api.adapter.`in`
+package api.adapter.`in`
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
