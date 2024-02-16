@@ -59,3 +59,126 @@ What?
 
 사용자가 주차할 주차장에 자리가 있는 경우 찜을 할 수 있으며, 찜을 한 경우 제한시간(아직 불확실) 이내에 입차를 하지 않을 경우 timeout 으로
 찜이 자동 취소되는 기능
+
+<h3>Module 관계도</h3>
+```mermaid
+
+graph TD;
+    Api-->Domain;
+    Api-->Persistence;
+
+```
+
+```mermaid
+
+graph TD;
+    Persistence-->Domain;
+
+```
+
+<h2>Entity 관계도</h2>
+
+```mermaid
+---
+title: Par-king
+---
+
+classDiagram
+    class MemberStatus["MemberStatus"] {
+        ACTIVATED,
+        REVOKED
+    }
+
+    class MemberInfo["MemberInfo"] {
+        String memberId,
+        String name,
+        String email
+    }
+
+    class Password["Password"] {
+        String password
+    }
+
+    class Member["Member"] {
+        id,
+        noShowCount,
+        MemberInfo,
+        MemberStatus,
+        carIdList,
+        parkingLotIdList,
+        dibsOnParkingLotList,
+        NoShowList
+    }
+    Member *-- MemberInfo
+    Member *-- MemberStatus
+    Member *-- Password
+
+    class DibsOnParkingLotStatus["DibsOnParkingLotStatus"] {
+        DIBS_ON_PARKING_LOT,
+        COMPLETE,
+        NO_SHOW,
+        NORMAL
+    }
+    class DibsOnParkingLot["DibsOnParkingLot"] {
+        Long id,
+        Long carId,
+        Long memeberId,
+        Long parkingLotId
+    }
+
+    DibsOnParkingLot *-- DibsOnParkingLotStatus
+
+    class Car["Car"] {
+        String carNumber,
+        Long dibsOnParkingLotId,
+        Long parkingLotId,
+        Long memberId,
+        DibsOnParkingLotStatus
+        TimeStamp startDibsOnTime
+    }
+    Car *-- DibsOnParkingLotStatus
+
+    class ParkingLotCategory["ParkingLotCategory"] {
+        String cityName,
+        String guName
+    }
+
+    class ParkingLotInfo["ParkingLotInfo"] {
+        String name,
+        Long totalSpace,
+        Long occupiedSpace,
+        Money cost,
+        Money extraCost
+    }
+
+    class ParkingLot["ParkingLot"] {
+        Long id,
+        Long memberId,
+        ParkingLotInfo,
+        ParkingLotCategory
+    }
+
+    ParkingLot *-- ParkingLotInfo
+    ParkingLot *-- ParkingLotCategory
+
+    class NoShow["NoShow"] {
+        Long memberId,
+        Long parkingLotId,
+        Long carId,
+        TimeStamp noShowTime
+    }
+
+    DibsOnParkingLot .. Car
+    DibsOnParkingLot .. ParkingLot
+    DibsOnParkingLot .. Member
+
+    Member .. Car
+    Member .. ParkingLot
+    Member .. NoShow
+
+    ParkingLot .. Car
+
+    NoShow .. Car
+    NoShow .. ParkingLot
+    NoShow .. Member
+```
