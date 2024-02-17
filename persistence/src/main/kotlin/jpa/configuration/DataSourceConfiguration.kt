@@ -46,8 +46,8 @@ class DataSourceConfiguration {
     @Bean
     fun parKingEntityManagerFactory(builder: EntityManagerFactoryBuilder): LocalContainerEntityManagerFactoryBean {
         val properties = HashMap<String, String>()
-        properties[AvailableSettings.USE_SECOND_LEVEL_CACHE] = false.toString()
-        properties[AvailableSettings.USE_QUERY_CACHE] = false.toString()
+        properties[AvailableSettings.USE_SECOND_LEVEL_CACHE] = "false"
+        properties[AvailableSettings.USE_QUERY_CACHE] = "false"
 
         return builder.dataSource(parKingDataSource()).packages(Jpa::class.java).properties(properties).persistenceUnit("parKing").build()
     }
