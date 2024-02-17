@@ -5,7 +5,6 @@ import java.time.LocalDateTime
 data class Member(
     val memberId: Long? = null,
     val memberInfo: MemberInfo,
-    val password: Password? = null,
     val carIdList: List<Car> = listOf(),
     val parkingLotIdList: List<ParkingLot> = listOf(),
     val dibsOnParkingLotList: List<DibsOnParkingLot> = listOf(),

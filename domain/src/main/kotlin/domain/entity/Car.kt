@@ -7,7 +7,7 @@ data class Car (
     var carNumber: String,
     val memberId: Long,
     var parkingLotId: Long? = null,
-    val DibsOnParkingLotId: DibsOnParkingLot,
+    val DibsOnParkingLotId: Long,
     var dibsOnParkingLotStatus: DibsOnParkingLotStatus = DibsOnParkingLotStatus.NORMAL,
     var startDibsOnTime: LocalDateTime? = null
 )

@@ -1,9 +1,10 @@
 package domain.entity
 
 data class DibsOnParkingLot(
-    val memberId: Member,
-    val parkingLotId: ParkingLot,
-    val carId: Car,
+    var dibsOnParkingLotId: Long? = null,
+    val memberId: Long,
+    val parkingLotId: Long,
+    val carId: Long,
     var currentStatus: DibsOnParkingLotStatus = DibsOnParkingLotStatus.DIBS_ON_PARKING_LOT
 )
 
