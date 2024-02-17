@@ -182,3 +182,28 @@ classDiagram
     NoShow .. ParkingLot
     NoShow .. Member
 ```
+
+<h2>JWT</h2>
+
+```mermaid
+---
+title: Token을 이용한 통신(access, refresh token simple)
+---
+sequenceDiagram
+		actor Client
+    Client->>Web: Request login
+		Web-)Client: return refresh, access token
+		Client->>Web: Request action with access token
+		Note right of Web: Check Access token expired
+		Web-)Client: return action
+		Note right of Web: Check Access token expired
+		Web-)Client: return action
+		Note right of Web: If Access token is expired
+		Web-)Client: notify Access toekn is expired
+		Client->>Web: refresh token
+		Note right of Web: reissue access token
+		Web-)Client: New Access Token
+		Client->>Web: Request action with access token
+		Note right of Web: Check Access token expired
+		Web-)Client: return action
+```
