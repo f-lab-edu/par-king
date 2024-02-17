@@ -24,7 +24,8 @@ data class MemberJpaEntity (
     val memberStatus: MemberStatus = MemberStatus.ACTIVATED,
 
     @Column(name="no_show_count")
-    val noShowCount: Long? = null,
+    val noShowCount: Long = 0L,
+
     @Column(name = "start_no_show_time")
     val startNoShowTime: LocalDateTime? = null
 
