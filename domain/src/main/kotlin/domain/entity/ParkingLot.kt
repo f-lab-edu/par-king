@@ -6,7 +6,7 @@ data class ParkingLot(
     var parkingLotId: Long? = null,
     val memberId: Long,
     val parkingLotInfo: ParkingLotInfo,
-    val parkingLotCategory: ParkingLotCategory
+    val parkingLotLocation: ParkingLotLocation
 )
 
 data class ParkingLotInfo(
@@ -18,7 +18,7 @@ data class ParkingLotInfo(
     val extraCost: BigDecimal = BigDecimal.ZERO
 )
 
-data class ParkingLotCategory(
+data class ParkingLotLocation(
     val cityName: String,
     val guName: String
 )
