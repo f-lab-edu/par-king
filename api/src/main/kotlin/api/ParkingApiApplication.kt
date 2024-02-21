@@ -16,6 +16,5 @@ import parking.jpa.configuration.EnableDataSourceConfiguration
 class ParKingApiApplication
 
 fun main(args: Array<String>) {
-	System.setProperty("spring.config.name", "application-api, application-persistence")
 	runApplication<ParKingApiApplication>(*args)
 }
