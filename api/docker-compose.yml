@@ -1,0 +1,49 @@
+version: '3'
+services:
+  # 서비스 명
+  database:
+    # 사용할 이미지
+    image: mysql:8.3.0
+    # 컨테이너명 설정
+    container_name: mysql_compose
+    # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
+    ports:
+      - "3307:3306"
+    # 네트워크 설정
+    networks:
+      - compose-network
+    # 환경 변수 설정
+    environment:
+      MYSQL_DATABASE: par_king
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: test1234
+      TZ: 'Asia/Seoul'
+    # 명렬어 설정
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  app:
+    container_name: main-server
+    # 리스타트 시점
+    restart: on-failure
+    # 환경 변수 셋팅
+    environment:
+      PARKING_DATASOURCE_JDBC_URL: jdbc:mysql://mysql_compose:3306/par_king
+      PARKING_DATASOURCE_USERNAME: root
+      PARKING_DATASOURCE_PASSWORD: test1234
+      SPRING_PROFILES_ACTIVE: local,persistence-local
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - compose-network
+    depends_on:
+      - database
+
+networks:
+  compose-network:
+    driver: bridge
