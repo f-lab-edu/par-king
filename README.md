@@ -218,3 +218,9 @@ sequenceDiagram
 		Note right of Web: Check Access token expired
 		Web-)Client: return action
 ```
+
+<h2>To Developer</h2>
+
+Local 환경 셋팅
+
+Active profile: local,persistence-local

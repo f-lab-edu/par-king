@@ -11,7 +11,7 @@ data class ParkingLot(
 
 data class ParkingLotInfo(
     val name: String,
-    val fullAddress: String,
+    val fullAddress: String?,
     val totalSpace: Long,
     val occupiedSpace: Long = 0L,
     val cost: BigDecimal = BigDecimal.ZERO,

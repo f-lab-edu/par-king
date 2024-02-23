@@ -16,7 +16,7 @@ CREATE TABLE car (
     member_id                   int,
     parking_lot_id              int,
     dibs_on_parking_lot_id      int,
-    dibs_on_parking_lot_status  varchar(20),
+    dibs_on_parking_lot_status  enum('DIBS_ON_PARKING_LOT', 'COMPLETE', 'NO_SHOW', 'NORMAL'),
     start_dibs_on_time          datetime,
     created_at                  datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                  datetime
