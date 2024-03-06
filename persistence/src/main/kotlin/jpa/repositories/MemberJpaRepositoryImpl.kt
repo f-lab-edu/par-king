@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class MemberJpaRepositoryImpl : QuerydslRepositorySupport(MemberJpaEntity::class.java), MemberJpaRepositoryCustom {
-    override fun findMemberByMemberId(memberId: Long): MemberJpaEntity? {
+    override fun findMemberByMemberId(memberId: String): MemberJpaEntity? {
         return from(memberJpaEntity)
-            .where(memberJpaEntity.id.eq(memberId))
+            .where(memberJpaEntity.memberId.eq(memberId))
             .fetchFirst() ?: null
     }
 }
