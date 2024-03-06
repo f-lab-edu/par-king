@@ -1,7 +1,11 @@
 package redis.service
 
-interface RedisService {
-    fun get(key: String) : String
+import java.time.Duration
 
-    fun set(key: String, value: String)
+interface RedisService<T> {
+    fun get(key: String) : T
+
+    fun set(key: String, value: T, duration: Duration = Duration.ofMinutes(10L))
+
+    fun getStringValues(pattern: String): List<String>
 }
