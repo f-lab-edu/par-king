@@ -22,7 +22,6 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.redisson:redisson-spring-boot-starter:3.23.3")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-//    implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
