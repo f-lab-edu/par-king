@@ -13,6 +13,7 @@ class JwtAuthenticationFilter(
 ): OncePerRequestFilter() {
     companion object {
         const val SIGN_IN_URL = "/member/sign-in"
+        const val BEARER_TOKEN = "Bearer "
     }
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -25,7 +26,7 @@ class JwtAuthenticationFilter(
             return filterChain.doFilter(request, response)
 
         // Bearer타입 토큰이 있을 때 가져온다.
-        val token = authorizationHeader.substring("Bearer ".length)
+        val token = authorizationHeader.substring(BEARER_TOKEN.length)
 
         // 레디스에 토큰 정보가 있는지 확인 후 토큰 검증
         if (jwtTokenProvider.validateExpireToken(token)) {
