@@ -30,8 +30,6 @@ class JwtAuthenticationFilter(
 
         // 레디스에 토큰 정보가 있는지 확인 후 토큰 검증
         if (jwtTokenProvider.validateExpireToken(token)) {
-            // 검증 성공 로그
-            logger.info("토큰 검증 성공")
             val username = jwtTokenProvider.parseUsername(token)
             // username으로 AuthenticationToken 생성
             val authentication: Authentication = jwtTokenProvider.getAuthentication(username)
@@ -40,7 +38,7 @@ class JwtAuthenticationFilter(
         } else {
             // 토큰이 만료가 되면 cookie에 refresh 요청을 위한 쿠키를 넣어준다.
             response.addCookie(Cookie("refresh", "true"))
-            logger.info("로그인 실패")
+            logger.warn("로그인 실패")
         }
 
         filterChain.doFilter(request, response)
