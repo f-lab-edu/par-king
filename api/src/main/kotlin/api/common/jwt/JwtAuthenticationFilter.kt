@@ -8,13 +8,13 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
+
+const val SIGN_IN_URL = "/member/sign-in"
+const val BEARER_TOKEN = "Bearer "
+
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider
 ): OncePerRequestFilter() {
-    companion object {
-        const val SIGN_IN_URL = "/member/sign-in"
-        const val BEARER_TOKEN = "Bearer "
-    }
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
