@@ -1,7 +1,7 @@
 package api.application.service
 
 import api.application.port.`in`.FindMemberUseCase
-import api.application.port.`in`.MakeAccessToken
+import api.application.port.`in`.CreateTokenUsingRefreshTokenUseCase
 import api.application.port.`in`.SignInMemberUseCase
 import api.application.port.out.FindMemberPort
 import api.application.vo.MemberInfoVO
@@ -26,7 +26,7 @@ class MemberInquiryService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val passwordUtil: PasswordUtil,
     private val redisService: RedisService<String>
-) : FindMemberUseCase, SignInMemberUseCase, MakeAccessToken {
+) : FindMemberUseCase, SignInMemberUseCase, CreateTokenUsingRefreshTokenUseCase {
     override fun findMemberInfoByMemberId(memberId: String): MemberInfoVO {
         val member = findMemberPort.findMemberInfoByMemberId(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
@@ -75,7 +75,7 @@ class MemberInquiryService(
         return Member.LIMIT_PASSWORD_TRY_COUNT >= values.size
     }
 
-    override fun makeAccessToken(refreshToken: String): Token {
+    override fun createAccessToken(refreshToken: String): Token {
         if (jwtTokenProvider.validateExpireToken(refreshToken)) {
             val memberId = jwtTokenProvider.parseUsername(refreshToken)
 
