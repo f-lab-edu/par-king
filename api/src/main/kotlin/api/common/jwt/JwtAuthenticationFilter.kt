@@ -1,7 +1,6 @@
 package api.common.jwt
 
 import jakarta.servlet.FilterChain
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
@@ -15,6 +14,7 @@ const val BEARER_TOKEN = "Bearer "
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider
 ): OncePerRequestFilter() {
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -36,9 +36,9 @@ class JwtAuthenticationFilter(
             // SecurityContext에 등록
             SecurityContextHolder.getContext().authentication = authentication
         } else {
-            // 토큰이 만료가 되면 cookie에 refresh 요청을 위한 쿠키를 넣어준다.
-            response.addCookie(Cookie("refresh", "true"))
-            logger.warn("로그인 실패")
+            // 토큰이 만료가 되면 401 응답을 보낸다
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+            return
         }
 
         filterChain.doFilter(request, response)
