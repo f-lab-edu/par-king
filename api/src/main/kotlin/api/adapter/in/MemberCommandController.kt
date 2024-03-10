@@ -1,6 +1,6 @@
 package api.adapter.`in`
 
-import api.adapter.`in`.dto.MemberInfoDTO
+import api.adapter.`in`.dto.SignUpDTO
 import api.application.port.`in`.SaveMemberUseCase
 import api.common.dto.SuccessResponseDTO
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,11 +15,9 @@ class MemberCommandController(
 ) {
     @PostMapping("/sign-up")
     fun signUp(
-        @RequestBody memberInfo: MemberInfoDTO?
+        @RequestBody signUpDTO: SignUpDTO
     ): SuccessResponseDTO<String> {
-        if(memberInfo?.password == null) return SuccessResponseDTO.success("가입 페이지")
-
-        saveMemberUseCase.saveMember(memberInfo.toVO(), memberInfo.password)
+        saveMemberUseCase.saveMember(signUpDTO.toMemberInfoVO(), signUpDTO.password)
 
         return SuccessResponseDTO.success("가입 완료 페이지")
     }
