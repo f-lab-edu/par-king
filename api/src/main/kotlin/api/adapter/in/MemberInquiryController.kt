@@ -3,7 +3,7 @@ package api.adapter.`in`
 import api.adapter.`in`.dto.MemberInfoResponseDTO
 import api.adapter.`in`.dto.SignInDTO
 import api.application.port.`in`.FindMemberUseCase
-import api.application.port.`in`.CreateTokenUsingRefreshTokenUseCase
+import api.application.port.`in`.RefreshAccessToken
 import api.application.port.`in`.SignInMemberUseCase
 import api.common.dto.SuccessResponseDTO
 import api.common.jwt.Token
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class MemberInquiryController(
     private val findMemberUseCase: FindMemberUseCase,
     private val signInMemberUseCase: SignInMemberUseCase,
-    private val createTokenUsingRefreshTokenUseCase: CreateTokenUsingRefreshTokenUseCase
+    private val refreshAccessToken: RefreshAccessToken
 ) {
     @GetMapping("/info")
     fun getMemberInfo(
@@ -33,6 +33,6 @@ class MemberInquiryController(
     fun refresh(
         @RequestBody token: Token
     ): SuccessResponseDTO<Token> {
-        return SuccessResponseDTO.success(createTokenUsingRefreshTokenUseCase.createAccessToken(token.refreshToken!!))
+        return SuccessResponseDTO.success(refreshAccessToken.refreshAccessToken(token.refreshToken!!))
     }
 }
