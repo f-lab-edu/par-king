@@ -1,2 +1,9 @@
 hello:
   name: "Hello Par-king API Application"
+
+jwt:
+  secret: 91b3118d7edba66ef8436c1ab8fc35df258eef698e63d7a228759f8887892560
+
+parking:
+  secret:
+    key: "SECRET_KEY"

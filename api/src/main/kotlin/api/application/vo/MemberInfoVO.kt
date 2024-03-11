@@ -1,6 +1,7 @@
 package api.application.vo
 
 import domain.entity.Member
+import domain.entity.MemberInfo
 
 data class MemberInfoVO(
     val memberId: String,
@@ -20,4 +21,8 @@ data class MemberInfoVO(
             return memberInfoVO
         }
     }
+
+    fun toMember() = Member(
+        memberInfo = MemberInfo(memberId = this.memberId, name = this.memberName, email = this.memberEmail)
+    )
 }

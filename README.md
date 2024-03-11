@@ -210,7 +210,7 @@ sequenceDiagram
 		Note right of Web: Check Access token expired
 		Web-)Client: return action
 		Note right of Web: If Access token is expired
-		Web-)Client: notify Access toekn is expired
+		Web-)Client: notify Access token is expired by cookie
 		Client->>Web: refresh token
 		Note right of Web: reissue access token
 		Web-)Client: New Access Token

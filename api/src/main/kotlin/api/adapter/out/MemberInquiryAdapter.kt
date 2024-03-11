@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 @Component
 class MemberInquiryAdapter(
     private val memberJpaRepository: MemberJpaRepository
-) : FindMemberPort {
-    override fun findMemberInfoByMemberId(memberId: Long): Member? {
+) : FindMemberPort{
+    override fun findMemberInfoByMemberId(memberId: String): Member? {
         return memberJpaRepository.findMemberByMemberId(memberId)?.to()
     }
 }

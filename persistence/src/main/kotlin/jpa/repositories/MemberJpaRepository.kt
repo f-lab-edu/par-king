@@ -7,5 +7,5 @@ interface MemberJpaRepository : JpaRepository<MemberJpaEntity, Long>, MemberJpaR
 }
 
 interface MemberJpaRepositoryCustom {
-    fun findMemberByMemberId(memberId: Long): MemberJpaEntity?
+    fun findMemberByMemberId(memberId: String): MemberJpaEntity?
 }

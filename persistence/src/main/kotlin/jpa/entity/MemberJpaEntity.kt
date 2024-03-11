@@ -15,8 +15,12 @@ data class MemberJpaEntity (
 
     @Column(name = "member_id")
     val memberId: String,
+
+    val password: String,
+
     @Column(name = "member_name")
     val memberName: String,
+
     val email: String? = null,
 
     @Enumerated(EnumType.STRING)
@@ -31,7 +35,8 @@ data class MemberJpaEntity (
 
 ) : BaseEntity() {
     fun to() = Member (
-        memberId = this.id,
+        id = this.id,
+        password = password,
         memberInfo = MemberInfo(this.memberId, this.memberName, this.email),
         memberStatus = this.memberStatus
     )
@@ -39,6 +44,7 @@ data class MemberJpaEntity (
     companion object {
         fun from(member: Member) = MemberJpaEntity(
             memberId = member.memberInfo.memberId,
+            password = member.password!!,
             memberName = member.memberInfo.name,
             email = member.memberInfo.email,
             memberStatus = member.memberStatus,

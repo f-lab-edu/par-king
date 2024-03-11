@@ -3,8 +3,9 @@ package domain.entity
 import java.time.LocalDateTime
 
 data class Member(
-    val memberId: Long? = null,
+    val id: Long? = null,
     val memberInfo: MemberInfo,
+    var password: String? = null,
     val carIdList: List<Car> = listOf(),
     val parkingLotIdList: List<ParkingLot> = listOf(),
     val dibsOnParkingLotList: List<DibsOnParkingLot> = listOf(),
@@ -12,7 +13,14 @@ data class Member(
     var noShowCount: Long = 0L,
     var startNoShowTime: LocalDateTime? = null,
     var memberStatus: MemberStatus = MemberStatus.ACTIVATED
-)
+) {
+    companion object {
+        const val LIMIT_PASSWORD_TRY_COUNT = 5
+    }
+    fun getMemberId(): String {
+        return this.memberInfo.memberId
+    }
+}
 
 data class MemberInfo(
     val memberId: String,

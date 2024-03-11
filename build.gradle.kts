@@ -56,7 +56,8 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-aop")
         implementation("org.springframework.boot:spring-boot-starter-web")
-//		implementation("org.springframework.boot:spring-boot-starter-security")
+        implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+        implementation("io.netty:netty-resolver-dns-native-macos")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2")
         implementation("com.fasterxml.jackson.module:jackson-module-afterburner")
         testImplementation("org.springframework.boot:spring-boot-starter-test") {
