@@ -7,7 +7,6 @@ import com.parking.api.application.port.out.FindMemberPort
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.jwt.JwtTokenProvider
 import com.parking.api.common.jwt.Token
-import com.parking.api.util.PasswordUtil
 import com.parking.domain.entity.Member
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode.*
@@ -16,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import com.parking.redis.service.RedisService
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 import java.util.*
 
@@ -24,7 +24,7 @@ class MemberInquiryService(
     private val findMemberPort: FindMemberPort,
     private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider,
-    private val passwordUtil: PasswordUtil,
+    private val passwordEncoder: PasswordEncoder,
     private val redisService: RedisService<String>
 ) : FindMemberUseCase, SignInMemberUseCase,
     RefreshAccessToken {
@@ -56,7 +56,7 @@ class MemberInquiryService(
         val member = findMemberPort.findMemberInfoByMemberId(memberId)
 
         //비밀번호 일치 여부 확인
-        if (!passwordUtil.matches(password, member?.password!!)) {
+        if (!passwordEncoder.matches(password, member?.password!!)) {
             val uuid = UUID.randomUUID()
             redisService.set("${memberId}_${uuid}", LocalDateTime.now().toString())
 
