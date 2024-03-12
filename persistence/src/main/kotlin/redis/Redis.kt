@@ -1,4 +1,0 @@
-package redis
-
-interface Redis {
-}

@@ -1,4 +1,0 @@
-package jpa
-
-interface Jpa {
-}
