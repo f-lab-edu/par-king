@@ -1,16 +1,16 @@
 package com.parking.api.common.jwt
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.security.Keys
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
+import com.parking.domain.exception.enum.ExceptionCode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
-import java.nio.charset.StandardCharsets
-import java.security.Key
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 @Component
@@ -18,65 +18,50 @@ class JwtTokenProvider(
     private val userDetailsService: UserDetailsService
 ) {
     @Value("\${jwt.secret}")
-    private val secretKey: String = ""
-    private val ACCESS_TOKEN_EXPIRE_TIME: Long = 10 * 60 * 1000L
-    private val REFRESH_TOKEN_EXPIRE_TIME: Long = 24 * 60 * 60 * 1000L
-
-    private fun generateKey(): Key {
-        return Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
-    }
+    private val secretKey: String = "SECRET_KEY"
+    private val CLAIM_NAME = "username"
+    private val TEN = 10L
+    private val ONE = 1L
 
     // 토큰생성
     fun createAccessToken(username: String): String {
-        val claims: Claims = Jwts.claims()
-        claims["username"] = username
+        val now = LocalDateTime.now()
 
-        return Jwts.builder()
-            .setClaims(claims)
-            .setExpiration(Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
-            .signWith(generateKey(), SignatureAlgorithm.HS256)
-            .compact()
+        return JWT.create().withClaim(CLAIM_NAME, username).withExpiresAt(
+            Date.from(
+                now.plusMinutes(TEN).atZone(ZoneId.systemDefault()).toInstant()
+            )
+        ).sign(Algorithm.HMAC256(secretKey))
     }
 
     fun createRefreshToken(username: String): String {
-        val claims: Claims = Jwts.claims()
-        claims["username"] = username
+        val now = LocalDateTime.now()
 
-        return Jwts.builder()
-            .setClaims(claims)
-            .setExpiration(Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_TIME))
-            .signWith(generateKey(), SignatureAlgorithm.HS256)
-            .compact()
+        return JWT.create().withClaim(CLAIM_NAME, username).withExpiresAt(
+            Date.from(
+                now.plusDays(ONE).atZone(ZoneId.systemDefault()).toInstant()
+            )
+        ).sign(Algorithm.HMAC256(secretKey))
     }
 
     // 토큰에서 username 파싱
     fun parseUsername(token: String): String {
-        val claims: Claims = getClaimByToken(token)
-        return claims["username"] as String
-    }
-
-    // 토큰에서 claim 부분 가져옴
-    fun getClaimByToken(token: String) : Claims {
-        return Jwts.parserBuilder()
-            .setSigningKey(generateKey())
-            .build()
-            .parseClaimsJws(token)
-            .body
+        return JWT.decode(token).claims[CLAIM_NAME]?.asString()
+            ?: throw Exception(ExceptionCode.TOKEN_PARSE_FAIL.message)
     }
 
     /**
      * 토큰이 expire 되었는지 확인한다
      * */
     fun validateExpireToken(jwtToken: String): Boolean {
-        return try {
-            val claims = Jwts.parserBuilder()
-                .setSigningKey(generateKey())
-                .build()
-                .parseClaimsJws(jwtToken)
-            !claims.body.expiration.before(Date())
-        } catch (e: Exception) {
-            false
+        val jwtVerifier = JWT.require(Algorithm.HMAC256(secretKey)).acceptNotBefore(0L).build()
+        try {
+            jwtVerifier.verify(jwtToken)
         }
+        catch (verificationEx: JWTVerificationException) {
+            return false
+        }
+        return true
     }
 
     // JWT 토큰에서 인증 정보 조회
