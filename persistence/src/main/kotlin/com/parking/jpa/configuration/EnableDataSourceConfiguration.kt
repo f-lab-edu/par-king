@@ -1,4 +1,4 @@
-package parking.jpa.configuration
+package com.parking.jpa.configuration
 
 import org.springframework.context.annotation.Import
 import java.lang.annotation.Inherited

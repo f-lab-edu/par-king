@@ -1,9 +1,8 @@
-package parking.jpa.configuration
+package com.parking.jpa.configuration
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import jakarta.persistence.EntityManagerFactory
-import com.parking.jpa.Jpa
 import org.hibernate.cfg.AvailableSettings
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -20,12 +19,13 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
 
+const val PACKAGE_NAME = "com.parking.jpa"
 @Configuration
 @ConditionalOnClass(EnableDataSourceConfiguration::class)
 @EnableJpaRepositories(
     entityManagerFactoryRef = "parKingEntityManagerFactory",
     transactionManagerRef = "parKingTransactionManager",
-    basePackageClasses = [Jpa::class]
+    basePackages = [PACKAGE_NAME]
 )
 @EnableTransactionManagement
 @EnableJpaAuditing
@@ -49,7 +49,7 @@ class DataSourceConfiguration {
         properties[AvailableSettings.USE_SECOND_LEVEL_CACHE] = "false"
         properties[AvailableSettings.USE_QUERY_CACHE] = "false"
 
-        return builder.dataSource(parKingDataSource()).packages(Jpa::class.java).properties(properties).persistenceUnit("parKing").build()
+        return builder.dataSource(parKingDataSource()).packages(PACKAGE_NAME).properties(properties).persistenceUnit("parKing").build()
     }
 
     @Primary
