@@ -1,6 +1,6 @@
 package com.parking.api.common.jwt
 
-import domain.entity.Member
+import com.parking.domain.entity.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

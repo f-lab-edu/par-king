@@ -1,7 +1,7 @@
 package com.parking.jpa.entity
 
-import domain.entity.Car
-import domain.entity.DibsOnParkingLotStatus
+import com.parking.domain.entity.Car
+import com.parking.domain.entity.DibsOnParkingLotStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

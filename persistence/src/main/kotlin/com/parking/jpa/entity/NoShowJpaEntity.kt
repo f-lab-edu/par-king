@@ -1,6 +1,6 @@
 package com.parking.jpa.entity
 
-import domain.entity.NoShow
+import com.parking.domain.entity.NoShow
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

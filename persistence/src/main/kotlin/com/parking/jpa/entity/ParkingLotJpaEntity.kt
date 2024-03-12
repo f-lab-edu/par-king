@@ -1,8 +1,8 @@
 package com.parking.jpa.entity
 
-import domain.entity.ParkingLot
-import domain.entity.ParkingLotInfo
-import domain.entity.ParkingLotLocation
+import com.parking.domain.entity.ParkingLot
+import com.parking.domain.entity.ParkingLotInfo
+import com.parking.domain.entity.ParkingLotLocation
 import jakarta.persistence.*
 import java.math.BigDecimal
 

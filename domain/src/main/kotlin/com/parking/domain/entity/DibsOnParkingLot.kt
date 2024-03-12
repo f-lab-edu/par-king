@@ -1,4 +1,4 @@
-package domain.entity
+package com.parking.domain.entity
 
 data class DibsOnParkingLot(
     var dibsOnParkingLotId: Long? = null,

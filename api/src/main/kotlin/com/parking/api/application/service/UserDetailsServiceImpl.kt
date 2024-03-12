@@ -2,8 +2,8 @@ package com.parking.api.application.service
 
 import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.common.jwt.UserDetailsImpl
-import domain.exception.MemberException
-import domain.exception.enum.ExceptionCode
+import com.parking.domain.exception.MemberException
+import com.parking.domain.exception.enum.ExceptionCode
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service

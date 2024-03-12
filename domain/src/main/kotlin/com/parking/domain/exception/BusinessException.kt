@@ -1,6 +1,6 @@
-package domain.exception
+package com.parking.domain.exception
 
-import domain.exception.enum.ExceptionCode
+import com.parking.domain.exception.enum.ExceptionCode
 
 sealed class BusinessException(
     open val exceptionCode: ExceptionCode,

@@ -1,8 +1,8 @@
 package com.parking.jpa.entity
 
-import domain.entity.Member
-import domain.entity.MemberInfo
-import domain.entity.MemberStatus
+import com.parking.domain.entity.Member
+import com.parking.domain.entity.MemberInfo
+import com.parking.domain.entity.MemberStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

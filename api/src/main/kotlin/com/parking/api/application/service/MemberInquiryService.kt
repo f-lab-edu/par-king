@@ -8,9 +8,9 @@ import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.jwt.JwtTokenProvider
 import com.parking.api.common.jwt.Token
 import com.parking.api.util.PasswordUtil
-import domain.entity.Member
-import domain.exception.MemberException
-import domain.exception.enum.ExceptionCode.*
+import com.parking.domain.entity.Member
+import com.parking.domain.exception.MemberException
+import com.parking.domain.exception.enum.ExceptionCode.*
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

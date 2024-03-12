@@ -1,4 +1,4 @@
-package domain.exception.enum
+package com.parking.domain.exception.enum
 
 enum class ExceptionCode(
     val message: String

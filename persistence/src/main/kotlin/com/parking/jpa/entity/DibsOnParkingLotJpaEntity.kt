@@ -1,7 +1,7 @@
 package com.parking.jpa.entity
 
-import domain.entity.DibsOnParkingLot
-import domain.entity.DibsOnParkingLotStatus
+import com.parking.domain.entity.DibsOnParkingLot
+import com.parking.domain.entity.DibsOnParkingLotStatus
 import jakarta.persistence.*
 
 @Entity

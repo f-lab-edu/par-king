@@ -1,7 +1,7 @@
 package com.parking.api.application.vo
 
-import domain.entity.Member
-import domain.entity.MemberInfo
+import com.parking.domain.entity.Member
+import com.parking.domain.entity.MemberInfo
 
 data class MemberInfoVO(
     val memberId: String,
