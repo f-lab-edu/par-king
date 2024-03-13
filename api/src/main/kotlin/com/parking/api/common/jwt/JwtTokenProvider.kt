@@ -20,8 +20,6 @@ class JwtTokenProvider(
     @Value("\${jwt.secret}")
     private val secretKey: String = "SECRET_KEY"
     private val CLAIM_NAME = "username"
-    private val TEN = 10L
-    private val ONE = 1L
 
     // 토큰생성
     fun createAccessToken(username: String): String {
@@ -29,7 +27,7 @@ class JwtTokenProvider(
 
         return JWT.create().withClaim(CLAIM_NAME, username).withExpiresAt(
             Date.from(
-                now.plusMinutes(TEN).atZone(ZoneId.systemDefault()).toInstant()
+                now.plusMinutes(10L).atZone(ZoneId.systemDefault()).toInstant()
             )
         ).sign(Algorithm.HMAC256(secretKey))
     }
@@ -39,7 +37,7 @@ class JwtTokenProvider(
 
         return JWT.create().withClaim(CLAIM_NAME, username).withExpiresAt(
             Date.from(
-                now.plusDays(ONE).atZone(ZoneId.systemDefault()).toInstant()
+                now.plusDays(1L).atZone(ZoneId.systemDefault()).toInstant()
             )
         ).sign(Algorithm.HMAC256(secretKey))
     }
