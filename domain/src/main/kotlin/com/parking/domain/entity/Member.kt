@@ -25,6 +25,10 @@ data class Member(
         memberInfo.name = name
         memberInfo.email = email
     }
+
+    fun revoke() {
+        memberStatus = MemberStatus.REVOKED
+    }
 }
 
 data class MemberInfo(
