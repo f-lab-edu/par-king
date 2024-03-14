@@ -1,5 +1,6 @@
 package com.parking.api.common.jwt
 
+import com.parking.domain.exception.enum.ExceptionCode
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -37,8 +38,8 @@ class JwtAuthenticationFilter(
             SecurityContextHolder.getContext().authentication = authentication
         } else {
             // 토큰이 만료가 되면 401 응답을 보낸다
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
-            return
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            request.setAttribute("exception", Exception(ExceptionCode.TOKEN_EXPIRED_ERROR.message))
         }
 
         filterChain.doFilter(request, response)
