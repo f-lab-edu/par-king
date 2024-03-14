@@ -8,4 +8,6 @@ interface RedisService<T> {
     fun set(key: String, value: T, duration: Duration = Duration.ofMinutes(10L))
 
     fun getStringValues(pattern: String): List<String>
+
+    fun deleteStringValues(pattern: String)
 }
