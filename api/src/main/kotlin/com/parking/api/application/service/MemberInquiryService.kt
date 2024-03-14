@@ -56,6 +56,7 @@ class MemberInquiryService(
             throw MemberException(PASSWORD_NOT_MATCH, PASSWORD_NOT_MATCH.message)
         }
 
+        //입력한 비밀번호 일치할 경우 현재 redis 에 저장된 비밀번호가 틀린 기록을 모두 삭제
         redisService.deleteStringValues(String.format("%s_*", memberId))
 
         try {
