@@ -43,6 +43,7 @@ data class MemberJpaEntity (
 
     companion object {
         fun from(member: Member) = MemberJpaEntity(
+            id = member.id,
             memberId = member.memberInfo.memberId,
             password = member.password!!,
             memberName = member.memberInfo.name,

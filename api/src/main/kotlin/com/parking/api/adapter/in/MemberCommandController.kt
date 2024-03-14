@@ -1,6 +1,9 @@
 package com.parking.api.adapter.`in`
 
+import com.parking.api.adapter.`in`.dto.MemberInfoDTO
+import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
 import com.parking.api.adapter.`in`.dto.SignUpDTO
+import com.parking.api.application.port.`in`.ModifyMemberInfoUseCase
 import com.parking.api.application.port.`in`.SaveMemberUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,14 +14,23 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/member")
 class MemberCommandController(
-    private val saveMemberUseCase: SaveMemberUseCase
+    private val saveMemberUseCase: SaveMemberUseCase,
+    private val modifyMemberInfoUseCase: ModifyMemberInfoUseCase
 ) {
     @PostMapping("/sign-up")
     fun signUp(
         @RequestBody signUpDTO: SignUpDTO
-    ): SuccessResponseDTO<String> {
+    ): SuccessResponseDTO<Boolean> {
         saveMemberUseCase.saveMember(signUpDTO.toMemberInfoVO(), signUpDTO.password)
 
-        return SuccessResponseDTO.success("가입 완료 페이지")
+        return SuccessResponseDTO.success(true)
+    }
+
+    @PostMapping("/modify")
+    fun modify(
+        @RequestBody memberInfoDTO: MemberInfoDTO
+    ): SuccessResponseDTO<MemberInfoResponseDTO> {
+
+        return SuccessResponseDTO.success(MemberInfoResponseDTO.from(modifyMemberInfoUseCase.modify(memberInfoDTO.to())))
     }
 }
