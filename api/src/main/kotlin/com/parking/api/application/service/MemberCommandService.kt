@@ -7,6 +7,7 @@ import com.parking.api.application.port.`in`.RevokeMemberUseCase
 import com.parking.api.application.port.`in`.SaveMemberUseCase
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
+import com.parking.domain.entity.MemberStatus
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode
 import mu.KLogging
@@ -26,8 +27,7 @@ class MemberCommandService(
         val member = memberInfoVO.toMember()
         member.password = passwordEncoder.encode(password)
 
-        val savedMember = memberCommandAdapter.saveMember(member)
-        logger.info (savedMember.getMemberId())
+        memberCommandAdapter.saveMember(member)
     }
 
     override fun modify(memberInfoVO: MemberInfoVO): MemberInfoVO {
@@ -45,9 +45,9 @@ class MemberCommandService(
 
         member.revoke()
 
-        memberCommandAdapter.saveMember(member)
+        val savedMember = memberCommandAdapter.saveMember(member)
 
-        return true
+        return savedMember.memberStatus == MemberStatus.REVOKED
     }
 
     private fun findMember(memberId: String): Member {
