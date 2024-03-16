@@ -40,6 +40,8 @@ class MemberCommandController(
     fun revoke(
         @RequestParam memberId: String
     ): SuccessResponseDTO<Boolean> {
-        return SuccessResponseDTO.success(revokeMemberUseCase.revoke(memberId))
+        revokeMemberUseCase.revoke(memberId)
+
+        return SuccessResponseDTO.success(true)
     }
 }

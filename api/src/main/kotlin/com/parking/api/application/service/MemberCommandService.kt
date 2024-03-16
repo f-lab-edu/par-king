@@ -7,13 +7,11 @@ import com.parking.api.application.port.`in`.RevokeMemberUseCase
 import com.parking.api.application.port.`in`.SaveMemberUseCase
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
-import com.parking.domain.entity.MemberStatus
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode
 import mu.KLogging
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MemberCommandService(
@@ -22,7 +20,6 @@ class MemberCommandService(
     private val passwordEncoder: PasswordEncoder
 ): SaveMemberUseCase, ModifyMemberInfoUseCase, RevokeMemberUseCase {
 
-    @Transactional
     override fun saveMember(memberInfoVO: MemberInfoVO, password: String) {
         val member = memberInfoVO.toMember()
         member.password = passwordEncoder.encode(password)
@@ -35,19 +32,17 @@ class MemberCommandService(
 
         member.modifyMemberInfo(memberInfoVO.memberName, memberInfoVO.memberEmail)
 
-        val savedMember = memberCommandAdapter.saveMember(member)
+        memberCommandAdapter.saveMember(member)
 
-        return MemberInfoVO.from(savedMember)
+        return MemberInfoVO.from(member)
     }
 
-    override fun revoke(memberId: String): Boolean {
+    override fun revoke(memberId: String) {
         val member = findMember(memberId)
 
         member.revoke()
 
-        val savedMember = memberCommandAdapter.saveMember(member)
-
-        return savedMember.memberStatus == MemberStatus.REVOKED
+        memberCommandAdapter.saveMember(member)
     }
 
     private fun findMember(memberId: String): Member {
