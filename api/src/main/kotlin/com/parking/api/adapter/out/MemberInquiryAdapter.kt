@@ -12,4 +12,8 @@ class MemberInquiryAdapter(
     override fun findMemberInfoByMemberId(memberId: String): Member? {
         return memberJpaRepository.findMemberByMemberId(memberId)?.to()
     }
+
+    override fun findIdByMemberId(memberId: String): Long? {
+        return memberJpaRepository.findIdByMemberId(memberId)
+    }
 }
