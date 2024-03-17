@@ -12,7 +12,7 @@ import java.math.BigDecimal
 data class ParkingLotJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     @Column(name = "member_id")
     val memberId: Long,
@@ -46,5 +46,25 @@ data class ParkingLotJpaEntity(
         parkingLotInfo = ParkingLotInfo(name, fullAddress, totalSpace, occupiedSpace, cost, extraCost),
         parkingLotLocation = ParkingLotLocation(cityName, guName)
     )
+
+    companion object {
+        fun from(parkingLot: ParkingLot): ParkingLotJpaEntity {
+            val parkingLotInfo = parkingLot.parkingLotInfo
+            val parkingLotLocation = parkingLot.parkingLotLocation
+
+            return ParkingLotJpaEntity(
+                id = parkingLot.parkingLotId,
+                memberId = parkingLot.memberId,
+                name = parkingLotInfo.name,
+                fullAddress = parkingLotInfo.fullAddress,
+                guName = parkingLotLocation.guName,
+                cityName = parkingLotLocation.cityName,
+                totalSpace = parkingLotInfo.totalSpace,
+                occupiedSpace = parkingLotInfo.occupiedSpace,
+                cost = parkingLotInfo.cost,
+                extraCost = parkingLotInfo.extraCost
+            )
+        }
+    }
 }
 

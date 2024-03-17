@@ -13,4 +13,11 @@ class MemberJpaRepositoryImpl : QuerydslRepositorySupport(MemberJpaEntity::class
             .where(memberJpaEntity.memberId.eq(memberId))
             .fetchFirst() ?: null
     }
+
+    override fun findIdByMemberId(memberId: String): Long? {
+        return from(memberJpaEntity)
+            .where(memberJpaEntity.memberId.eq(memberId))
+            .select(memberJpaEntity.id)
+            .fetchFirst() ?: null
+    }
 }
