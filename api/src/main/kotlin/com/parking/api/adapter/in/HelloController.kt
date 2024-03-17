@@ -13,9 +13,4 @@ class HelloController(
     fun hello(): String {
         return helloName
     }
-
-    @GetMapping("/test/token2")
-    fun token(): String {
-        return "success token"
-    }
 }

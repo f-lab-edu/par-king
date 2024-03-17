@@ -22,4 +22,8 @@ class RedisServiceImp<T>(
         val values = redissonClient.keys.getKeysByPattern(pattern)
         return values.map{ it }.toList()
     }
+
+    override fun deleteStringValues(pattern: String) {
+        redissonClient.keys.deleteByPattern(pattern)
+    }
 }

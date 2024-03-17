@@ -10,12 +10,12 @@ import com.parking.api.common.jwt.Token
 import com.parking.domain.entity.Member
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode.*
+import com.parking.redis.service.RedisService
 import mu.KLogging
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.stereotype.Service
-import com.parking.redis.service.RedisService
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
 
@@ -43,6 +43,22 @@ class MemberInquiryService(
             throw MemberException(LOGIN_TRY_COUNT_LIMIT, LOGIN_TRY_COUNT_LIMIT.message)
         }
 
+        val member = findMemberPort.findMemberInfoByMemberId(memberId) ?: throw MemberException(
+            MEMBER_NOT_FOUND,
+            MEMBER_NOT_FOUND.message
+        )
+
+        //비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(password, member.password!!)) {
+            val uuid = UUID.randomUUID()
+            redisService.set("${memberId}_${uuid}", LocalDateTime.now().toString())
+
+            throw MemberException(PASSWORD_NOT_MATCH, PASSWORD_NOT_MATCH.message)
+        }
+
+        //입력한 비밀번호 일치할 경우 현재 redis 에 저장된 비밀번호가 틀린 기록을 모두 삭제
+        redisService.deleteStringValues(String.format("%s_*", memberId))
+
         try {
             // 인증시도
             authenticationManager.authenticate(
@@ -51,16 +67,6 @@ class MemberInquiryService(
         } catch (e: Exception) {
             // 인증 실패
             throw MemberException(AUTHENTICATION_FAIL, AUTHENTICATION_FAIL.message)
-        }
-
-        val member = findMemberPort.findMemberInfoByMemberId(memberId)
-
-        //비밀번호 일치 여부 확인
-        if (!passwordEncoder.matches(password, member?.password!!)) {
-            val uuid = UUID.randomUUID()
-            redisService.set("${memberId}_${uuid}", LocalDateTime.now().toString())
-
-            throw MemberException(PASSWORD_NOT_MATCH, PASSWORD_NOT_MATCH.message)
         }
 
         // Login이 성공한 경우 Token 생성
@@ -73,7 +79,7 @@ class MemberInquiryService(
     private fun checkPasswordTryCount(memberId: String) : Boolean {
         val values = redisService.getStringValues(String.format("%s_*", memberId))
 
-        return Member.LIMIT_PASSWORD_TRY_COUNT >= values.size
+        return Member.LIMIT_PASSWORD_TRY_COUNT > values.size
     }
 
     override fun refreshAccessToken(refreshToken: String): Token {

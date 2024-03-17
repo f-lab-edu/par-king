@@ -20,12 +20,21 @@ data class Member(
     fun getMemberId(): String {
         return this.memberInfo.memberId
     }
+
+    fun modifyMemberInfo(name: String, email: String?) {
+        memberInfo.name = name
+        memberInfo.email = email
+    }
+
+    fun revoke() {
+        memberStatus = MemberStatus.REVOKED
+    }
 }
 
 data class MemberInfo(
     val memberId: String,
-    val name: String,
-    val email: String? = null
+    var name: String,
+    var email: String? = null
 )
 
 enum class MemberStatus {
