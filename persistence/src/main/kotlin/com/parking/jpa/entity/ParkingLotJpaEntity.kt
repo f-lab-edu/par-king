@@ -5,6 +5,7 @@ import com.parking.domain.entity.ParkingLotInfo
 import com.parking.domain.entity.ParkingLotLocation
 import jakarta.persistence.*
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 
 @Entity
@@ -37,14 +38,19 @@ data class ParkingLotJpaEntity(
     val cost: BigDecimal = BigDecimal.ZERO,
 
     @Column(name = "extra_cost")
-    val extraCost: BigDecimal = BigDecimal.ZERO
+    val extraCost: BigDecimal = BigDecimal.ZERO,
+
+    //ParkingLot 이 지워지는 시점을 기록하는 변수
+    @Column(name = "deleted_at")
+    val deletedAt: LocalDateTime
 
 ) : BaseEntity() {
     fun to() = ParkingLot(
         parkingLotId = id,
         memberId = memberId,
         parkingLotInfo = ParkingLotInfo(name, fullAddress, totalSpace, occupiedSpace, cost, extraCost),
-        parkingLotLocation = ParkingLotLocation(cityName, guName)
+        parkingLotLocation = ParkingLotLocation(cityName, guName),
+        deletedAt = deletedAt
     )
 
     companion object {
@@ -62,7 +68,8 @@ data class ParkingLotJpaEntity(
                 totalSpace = parkingLotInfo.totalSpace,
                 occupiedSpace = parkingLotInfo.occupiedSpace,
                 cost = parkingLotInfo.cost,
-                extraCost = parkingLotInfo.extraCost
+                extraCost = parkingLotInfo.extraCost,
+                deletedAt = parkingLot.deletedAt
             )
         }
     }
