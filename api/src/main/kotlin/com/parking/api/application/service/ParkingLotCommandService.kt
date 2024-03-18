@@ -4,6 +4,7 @@ import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.adapter.out.ParkingLotCommandAdapter
 import com.parking.api.application.port.`in`.CreateParkingLotUseCase
 import com.parking.api.application.vo.ParkingLotInfoVO
+import com.parking.domain.entity.ParkingLot
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode
 import org.springframework.stereotype.Service
@@ -18,7 +19,8 @@ class ParkingLotCommandService(
             ExceptionCode.MEMBER_NOT_FOUND,
             ExceptionCode.MEMBER_NOT_FOUND.message
         )
+        val deletedAt = ParkingLot.makeDeletedAt()
 
-        parkingLotCommandAdapter.save(parkingLotInfoVO.toParkingLot(memberId))
+        parkingLotCommandAdapter.save(parkingLotInfoVO.toParkingLot(memberId, deletedAt))
     }
 }

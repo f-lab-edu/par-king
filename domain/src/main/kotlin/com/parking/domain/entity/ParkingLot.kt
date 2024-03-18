@@ -1,13 +1,31 @@
 package com.parking.domain.entity
 
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
 data class ParkingLot(
     var parkingLotId: Long? = null,
     val memberId: Long,
     val parkingLotInfo: ParkingLotInfo,
-    val parkingLotLocation: ParkingLotLocation
-)
+    val parkingLotLocation: ParkingLotLocation,
+    //ParkingLot 이 지워지는 시점을 기록하는 변수
+    val deletedAt: LocalDateTime
+) {
+
+    companion object {
+        //5년 범위 안에 랜덤 값
+        private val RANDOM_RANGE = 60L * 60 * 24 * 365 * 5
+        fun makeDeletedAt(): LocalDateTime {
+            val initTime = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
+            val random = Random.nextLong(RANDOM_RANGE)
+
+            return initTime.minus(random, ChronoUnit.SECONDS)
+        }
+    }
+}
 
 data class ParkingLotInfo(
     val name: String,
