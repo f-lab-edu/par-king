@@ -29,6 +29,10 @@ data class Member(
     fun revoke() {
         memberStatus = MemberStatus.REVOKED
     }
+
+    fun isRevoked(): Boolean {
+        return memberStatus == MemberStatus.REVOKED
+    }
 }
 
 data class MemberInfo(
