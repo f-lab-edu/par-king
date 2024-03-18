@@ -34,6 +34,7 @@ CREATE TABLE parking_lot (
     occupied_space              int NOT NULL,
     cost                        BIGINT NOT NULL,
     extra_cost                  BIGINT NOT NULL,
+    deleted_at                  datetime,
     created_at                  datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                  datetime
 ) engine=InnoDB default character set = utf8;
