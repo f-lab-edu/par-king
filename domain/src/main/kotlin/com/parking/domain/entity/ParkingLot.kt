@@ -12,8 +12,11 @@ data class ParkingLot(
     val parkingLotInfo: ParkingLotInfo,
     val parkingLotLocation: ParkingLotLocation,
     //ParkingLot 이 지워지는 시점을 기록하는 변수
-    val deletedAt: LocalDateTime
+    var deletedAt: LocalDateTime
 ) {
+    fun delete() {
+        deletedAt = LocalDateTime.now()
+    }
 
     companion object {
         //5년 범위 안에 랜덤 값
