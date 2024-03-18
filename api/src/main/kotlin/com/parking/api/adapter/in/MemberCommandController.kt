@@ -23,10 +23,16 @@ class MemberCommandController(
     @PostMapping("/sign-up")
     fun signUp(
         @RequestBody signUpDTO: SignUpDTO
-    ): SuccessResponseDTO<Boolean> {
-        saveMemberUseCase.saveMember(signUpDTO.toMemberInfoVO(), signUpDTO.password)
+    ): SuccessResponseDTO<MemberInfoResponseDTO> {
 
-        return SuccessResponseDTO.success(true)
+        return SuccessResponseDTO.success(
+            MemberInfoResponseDTO.from(
+                saveMemberUseCase.saveMember(
+                    signUpDTO.toMemberInfoVO(),
+                    signUpDTO.password
+                )
+            )
+        )
     }
 
     @PostMapping("/modify")
