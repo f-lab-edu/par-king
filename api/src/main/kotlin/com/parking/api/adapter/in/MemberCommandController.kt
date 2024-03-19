@@ -3,9 +3,9 @@ package com.parking.api.adapter.`in`
 import com.parking.api.adapter.`in`.dto.MemberInfoDTO
 import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
 import com.parking.api.adapter.`in`.dto.SignUpDTO
-import com.parking.api.application.port.`in`.ModifyMemberInfoUseCase
-import com.parking.api.application.port.`in`.RevokeMemberUseCase
-import com.parking.api.application.port.`in`.SaveMemberUseCase
+import com.parking.api.application.port.`in`.member.ModifyMemberInfoUseCase
+import com.parking.api.application.port.`in`.member.RevokeMemberUseCase
+import com.parking.api.application.port.`in`.member.SaveMemberUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

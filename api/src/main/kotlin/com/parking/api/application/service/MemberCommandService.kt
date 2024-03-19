@@ -2,9 +2,9 @@ package com.parking.api.application.service
 
 import com.parking.api.adapter.out.MemberCommandAdapter
 import com.parking.api.adapter.out.MemberInquiryAdapter
-import com.parking.api.application.port.`in`.ModifyMemberInfoUseCase
-import com.parking.api.application.port.`in`.RevokeMemberUseCase
-import com.parking.api.application.port.`in`.SaveMemberUseCase
+import com.parking.api.application.port.`in`.member.ModifyMemberInfoUseCase
+import com.parking.api.application.port.`in`.member.RevokeMemberUseCase
+import com.parking.api.application.port.`in`.member.SaveMemberUseCase
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
 import com.parking.domain.exception.MemberException

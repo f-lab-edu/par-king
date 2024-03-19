@@ -2,9 +2,9 @@ package com.parking.api.adapter.`in`
 
 import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
 import com.parking.api.adapter.`in`.dto.SignInDTO
-import com.parking.api.application.port.`in`.FindMemberUseCase
-import com.parking.api.application.port.`in`.RefreshAccessToken
-import com.parking.api.application.port.`in`.SignInMemberUseCase
+import com.parking.api.application.port.`in`.member.FindMemberUseCase
+import com.parking.api.application.port.`in`.member.RefreshAccessToken
+import com.parking.api.application.port.`in`.member.SignInMemberUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import com.parking.api.common.jwt.Token
 import org.springframework.web.bind.annotation.*

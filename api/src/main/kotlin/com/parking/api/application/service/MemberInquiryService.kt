@@ -1,8 +1,8 @@
 package com.parking.api.application.service
 
-import com.parking.api.application.port.`in`.FindMemberUseCase
-import com.parking.api.application.port.`in`.RefreshAccessToken
-import com.parking.api.application.port.`in`.SignInMemberUseCase
+import com.parking.api.application.port.`in`.member.FindMemberUseCase
+import com.parking.api.application.port.`in`.member.RefreshAccessToken
+import com.parking.api.application.port.`in`.member.SignInMemberUseCase
 import com.parking.api.application.port.out.FindMemberPort
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.jwt.JwtTokenProvider

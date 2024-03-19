@@ -3,8 +3,8 @@ package com.parking.api.application.service
 import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.adapter.out.ParkingLotCommandAdapter
 import com.parking.api.adapter.out.ParkingLotInquiryAdapter
-import com.parking.api.application.port.`in`.CreateParkingLotUseCase
-import com.parking.api.application.port.`in`.DeleteParkingLotUseCase
+import com.parking.api.application.port.`in`.parkingLot.CreateParkingLotUseCase
+import com.parking.api.application.port.`in`.parkingLot.DeleteParkingLotUseCase
 import com.parking.api.application.vo.ParkingLotInfoVO
 import com.parking.domain.entity.ParkingLot
 import com.parking.domain.exception.MemberException

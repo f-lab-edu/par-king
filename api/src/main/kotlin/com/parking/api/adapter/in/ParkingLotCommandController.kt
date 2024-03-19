@@ -1,8 +1,8 @@
 package com.parking.api.adapter.`in`
 
 import com.parking.api.adapter.`in`.dto.ParkingLotInfoDTO
-import com.parking.api.application.port.`in`.CreateParkingLotUseCase
-import com.parking.api.application.port.`in`.DeleteParkingLotUseCase
+import com.parking.api.application.port.`in`.parkingLot.CreateParkingLotUseCase
+import com.parking.api.application.port.`in`.parkingLot.DeleteParkingLotUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.web.bind.annotation.*
 
