@@ -16,4 +16,10 @@ class ParkingLotInquiryAdapter(
 
         return parkingLotEntity?.to()
     }
+
+    override fun findByMemberId(memberId: Long): List<ParkingLot> {
+        return parkingLotJpaRepository.findAllByMemberId(memberId).map {
+            it.to()
+        }
+    }
 }
