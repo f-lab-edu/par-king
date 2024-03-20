@@ -4,6 +4,7 @@ import com.parking.api.adapter.`in`.dto.ParkingLotInfoDTO
 import com.parking.api.application.port.`in`.parkingLot.CreateParkingLotUseCase
 import com.parking.api.application.port.`in`.parkingLot.DeleteParkingLotUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,6 +23,7 @@ class ParkingLotCommandController(
     }
 
     @DeleteMapping("/delete/{parkingLotId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun delete(
         @PathVariable parkingLotId: Long
     ): SuccessResponseDTO<Boolean> {
