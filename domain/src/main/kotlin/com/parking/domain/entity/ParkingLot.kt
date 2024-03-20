@@ -21,11 +21,11 @@ data class ParkingLot(
     companion object {
         //5년 범위 안에 랜덤 값
         private val RANDOM_RANGE = 60L * 60 * 24 * 365 * 5
+        val STANDARD_DELETED_AT_TIME = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
         fun makeDeletedAt(): LocalDateTime {
-            val initTime = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
             val random = Random.nextLong(RANDOM_RANGE)
 
-            return initTime.minus(random, ChronoUnit.SECONDS)
+            return STANDARD_DELETED_AT_TIME.minus(random, ChronoUnit.SECONDS)
         }
     }
 }
