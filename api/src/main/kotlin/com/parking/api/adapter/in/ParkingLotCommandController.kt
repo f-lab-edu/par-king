@@ -21,9 +21,9 @@ class ParkingLotCommandController(
         return SuccessResponseDTO.success(true)
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{parkingLotId}")
     fun delete(
-        @RequestParam parkingLotId: Long
+        @PathVariable parkingLotId: Long
     ): SuccessResponseDTO<Boolean> {
         deleteParkingLotUseCase.delete(parkingLotId)
 
