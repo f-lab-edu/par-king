@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/parking-lot")
 class ParkingLotCommandController(
     private val createParkingLotUseCase: CreateParkingLotUseCase,
-    private val deleteParkingLot: DeleteParkingLotUseCase
+    private val deleteParkingLotUseCase: DeleteParkingLotUseCase
 ) {
     @PostMapping("/create")
     fun create(
@@ -25,7 +25,7 @@ class ParkingLotCommandController(
     fun delete(
         @RequestParam parkingLotId: Long
     ): SuccessResponseDTO<Boolean> {
-        deleteParkingLot.delete(parkingLotId)
+        deleteParkingLotUseCase.delete(parkingLotId)
 
         return SuccessResponseDTO.success(true)
     }
