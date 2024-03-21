@@ -6,11 +6,12 @@ import com.parking.api.adapter.out.ParkingLotInquiryAdapter
 import com.parking.api.application.port.`in`.parkingLot.CreateParkingLotUseCase
 import com.parking.api.application.port.`in`.parkingLot.DeleteParkingLotUseCase
 import com.parking.api.application.vo.ParkingLotInfoVO
-import com.parking.domain.entity.ParkingLot
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.ParkingLotException
-import com.parking.domain.exception.enum.ExceptionCode.*
+import com.parking.domain.exception.enum.ExceptionCode.MEMBER_NOT_FOUND
+import com.parking.domain.exception.enum.ExceptionCode.PARKING_LOT_NOT_FOUND
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class ParkingLotCommandService(
@@ -23,9 +24,8 @@ class ParkingLotCommandService(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message
         )
-        val deletedAt = ParkingLot.makeDeletedAt()
 
-        parkingLotCommandAdapter.save(parkingLotInfoVO.toParkingLot(memberId, deletedAt))
+        parkingLotCommandAdapter.save(parkingLotInfoVO.toParkingLot(memberId))
     }
 
     override fun delete(parkingLotId: Long) {
@@ -34,8 +34,6 @@ class ParkingLotCommandService(
             PARKING_LOT_NOT_FOUND.message
         )
 
-        parkingLot.delete()
-
-        parkingLotCommandAdapter.save(parkingLot)
+        parkingLotCommandAdapter.update(parkingLot, LocalDateTime.now())
     }
 }
