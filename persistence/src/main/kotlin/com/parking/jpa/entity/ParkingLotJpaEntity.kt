@@ -6,6 +6,9 @@ import com.parking.domain.entity.ParkingLotLocation
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
 
 @Entity
@@ -49,12 +52,18 @@ data class ParkingLotJpaEntity(
         parkingLotId = id,
         memberId = memberId,
         parkingLotInfo = ParkingLotInfo(name, fullAddress, totalSpace, occupiedSpace, cost, extraCost),
-        parkingLotLocation = ParkingLotLocation(cityName, guName),
-        deletedAt = deletedAt
+        parkingLotLocation = ParkingLotLocation(cityName, guName)
     )
 
     companion object {
-        fun from(parkingLot: ParkingLot): ParkingLotJpaEntity {
+        val STANDARD_DELETED_AT_TIME = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
+
+        fun from(parkingLot: ParkingLot, deletedAt: LocalDateTime?): ParkingLotJpaEntity {
+            val RANDOM_RANGE = 60L * 60 * 24 * 365 * 5
+
+            val random = Random.nextLong(RANDOM_RANGE)
+            val initDeletedAt = STANDARD_DELETED_AT_TIME.minus(random, ChronoUnit.SECONDS)
+
             val parkingLotInfo = parkingLot.parkingLotInfo
             val parkingLotLocation = parkingLot.parkingLotLocation
 
@@ -69,7 +78,7 @@ data class ParkingLotJpaEntity(
                 occupiedSpace = parkingLotInfo.occupiedSpace,
                 cost = parkingLotInfo.cost,
                 extraCost = parkingLotInfo.extraCost,
-                deletedAt = parkingLot.deletedAt
+                deletedAt = deletedAt ?: initDeletedAt
             )
         }
     }
