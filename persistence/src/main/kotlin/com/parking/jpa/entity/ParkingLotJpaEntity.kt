@@ -5,6 +5,10 @@ import com.parking.domain.entity.ParkingLotInfo
 import com.parking.domain.entity.ParkingLotLocation
 import jakarta.persistence.*
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
 
 @Entity
@@ -37,7 +41,11 @@ data class ParkingLotJpaEntity(
     val cost: BigDecimal = BigDecimal.ZERO,
 
     @Column(name = "extra_cost")
-    val extraCost: BigDecimal = BigDecimal.ZERO
+    val extraCost: BigDecimal = BigDecimal.ZERO,
+
+    //ParkingLot 이 지워지는 시점을 기록하는 변수
+    @Column(name = "deleted_at")
+    val deletedAt: LocalDateTime
 
 ) : BaseEntity() {
     fun to() = ParkingLot(
@@ -48,7 +56,14 @@ data class ParkingLotJpaEntity(
     )
 
     companion object {
-        fun from(parkingLot: ParkingLot): ParkingLotJpaEntity {
+        val STANDARD_DELETED_AT_TIME = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
+
+        fun from(parkingLot: ParkingLot, deletedAt: LocalDateTime?): ParkingLotJpaEntity {
+            val RANDOM_RANGE = 60L * 60 * 24 * 365 * 5
+
+            val random = Random.nextLong(RANDOM_RANGE)
+            val initDeletedAt = STANDARD_DELETED_AT_TIME.minus(random, ChronoUnit.SECONDS)
+
             val parkingLotInfo = parkingLot.parkingLotInfo
             val parkingLotLocation = parkingLot.parkingLotLocation
 
@@ -62,7 +77,8 @@ data class ParkingLotJpaEntity(
                 totalSpace = parkingLotInfo.totalSpace,
                 occupiedSpace = parkingLotInfo.occupiedSpace,
                 cost = parkingLotInfo.cost,
-                extraCost = parkingLotInfo.extraCost
+                extraCost = parkingLotInfo.extraCost,
+                deletedAt = deletedAt ?: initDeletedAt
             )
         }
     }

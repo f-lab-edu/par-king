@@ -1,4 +1,4 @@
-package com.parking.api.application.port.`in`
+package com.parking.api.application.port.`in`.member
 
 import com.parking.api.common.jwt.Token
 

@@ -1,4 +1,4 @@
-package com.parking.api.application.port.`in`
+package com.parking.api.application.port.`in`.parkingLot
 
 import com.parking.api.application.vo.ParkingLotInfoVO
 
