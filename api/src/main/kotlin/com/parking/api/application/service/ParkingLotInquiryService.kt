@@ -4,6 +4,7 @@ import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.adapter.out.ParkingLotInquiryAdapter
 import com.parking.api.application.port.`in`.parkingLot.FindParkingLotUseCase
 import com.parking.api.application.vo.ParkingLotListInfoVO
+import com.parking.api.application.vo.ParkingLotLocationVO
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode.MEMBER_NOT_FOUND
 import com.parking.domain.exception.enum.ExceptionCode.MEMBER_NOT_MATCH
@@ -27,6 +28,10 @@ class ParkingLotInquiryService(
             MEMBER_NOT_FOUND.message
         )
 
-        return parkingLotInquiryAdapter.findByMemberId(foundMemberId).map { ParkingLotListInfoVO.from(it) }
+        return parkingLotInquiryAdapter.findAllByMemberId(foundMemberId).map { ParkingLotListInfoVO.from(it) }
+    }
+
+    override fun findAllByLocation(location: ParkingLotLocationVO): List<ParkingLotListInfoVO> {
+        return parkingLotInquiryAdapter.findAllByLocation(location).map { ParkingLotListInfoVO.from(it) }
     }
 }

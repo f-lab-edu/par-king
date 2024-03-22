@@ -1,6 +1,7 @@
 package com.parking.api.adapter.out
 
 import com.parking.api.application.port.out.FindParkingLotPort
+import com.parking.api.application.vo.ParkingLotLocationVO
 import com.parking.domain.entity.ParkingLot
 import com.parking.jpa.repositories.ParkingLotJpaRepository
 import org.springframework.stereotype.Component
@@ -17,8 +18,14 @@ class ParkingLotInquiryAdapter(
         return parkingLotEntity?.to()
     }
 
-    override fun findByMemberId(memberId: Long): List<ParkingLot> {
+    override fun findAllByMemberId(memberId: Long): List<ParkingLot> {
         return parkingLotJpaRepository.findAllByMemberId(memberId).map {
+            it.to()
+        }
+    }
+
+    override fun findAllByLocation(location: ParkingLotLocationVO): List<ParkingLot> {
+        return parkingLotJpaRepository.findAllByLocation(location.cityName, location.guName).map {
             it.to()
         }
     }

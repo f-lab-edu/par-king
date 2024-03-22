@@ -1,11 +1,13 @@
 package com.parking.api.adapter.`in`
 
 import com.parking.api.adapter.`in`.dto.ParkingLotListInfoDTO
+import com.parking.api.adapter.`in`.dto.ParkingLotLocationDTO
 import com.parking.api.application.port.`in`.parkingLot.FindParkingLotUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -21,7 +23,18 @@ class ParkingLotInquiryController(
         @AuthenticationPrincipal currentUser: UserDetails,
         @RequestParam memberId: String
     ): SuccessResponseDTO<List<ParkingLotListInfoDTO>> {
-        val parkingLotList = findParkingLotUseCase.findAllByMemberId(currentUser.username, memberId).map { ParkingLotListInfoDTO.from(it) }
+        val parkingLotList = findParkingLotUseCase.findAllByMemberId(currentUser.username, memberId)
+            .map { ParkingLotListInfoDTO.from(it) }
+
+        return SuccessResponseDTO.success(parkingLotList)
+    }
+
+    @GetMapping("/find/location")
+    fun findParkingLots(
+        @RequestBody location: ParkingLotLocationDTO
+    ): SuccessResponseDTO<List<ParkingLotListInfoDTO>> {
+        val parkingLotList =
+            findParkingLotUseCase.findAllByLocation(location.to()).map { ParkingLotListInfoDTO.from(it) }
 
         return SuccessResponseDTO.success(parkingLotList)
     }
