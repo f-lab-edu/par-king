@@ -17,4 +17,14 @@ class ParkingLotJpaRepositoryImpl : QuerydslRepositorySupport(ParkingLotJpaEntit
             )
             .fetch()
     }
+
+    override fun findAllByLocation(cityName: String?, guName: String?): List<ParkingLotJpaEntity> {
+        return from(parkingLotJpaEntity)
+            .where(
+                parkingLotJpaEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME)
+                    .and(cityName?.let { parkingLotJpaEntity.cityName.eq(it) })
+                    .and(guName?.let { parkingLotJpaEntity.guName.eq(it) })
+            )
+            .fetch()
+    }
 }

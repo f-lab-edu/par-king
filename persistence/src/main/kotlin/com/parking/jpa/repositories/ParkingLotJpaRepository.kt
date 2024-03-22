@@ -7,4 +7,6 @@ interface ParkingLotJpaRepository : JpaRepository<ParkingLotJpaEntity, Long>, Pa
 
 interface ParkingLotJpaRepositoryCustom{
     fun findAllByMemberId(memberId: Long): List<ParkingLotJpaEntity>
+
+    fun findAllByLocation(cityName: String?, guName: String?): List<ParkingLotJpaEntity>
 }
