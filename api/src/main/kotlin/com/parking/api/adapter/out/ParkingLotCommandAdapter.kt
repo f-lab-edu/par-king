@@ -11,11 +11,11 @@ import java.time.LocalDateTime
 class ParkingLotCommandAdapter(
     private val parkingLotJpaRepository: ParkingLotJpaRepository
 ): SaveParkingLotPort {
-    override fun save(parkingLot: ParkingLot) {
-        parkingLotJpaRepository.save(ParkingLotJpaEntity.from(parkingLot, null))
+    override fun save(parkingLot: ParkingLot): ParkingLot {
+        return parkingLotJpaRepository.save(ParkingLotJpaEntity.from(parkingLot, null)).to()
     }
 
-    override fun update(parkingLot: ParkingLot, deletedAt: LocalDateTime) {
+    override fun deleteUpdate(parkingLot: ParkingLot, deletedAt: LocalDateTime) {
         parkingLotJpaRepository.save(ParkingLotJpaEntity.from(parkingLot, deletedAt))
     }
 }

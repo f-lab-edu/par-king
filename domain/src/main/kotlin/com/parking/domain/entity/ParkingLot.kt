@@ -5,9 +5,14 @@ import java.math.BigDecimal
 data class ParkingLot(
     var parkingLotId: Long? = null,
     val memberId: Long,
-    val parkingLotInfo: ParkingLotInfo,
-    val parkingLotLocation: ParkingLotLocation
-)
+    var parkingLotInfo: ParkingLotInfo,
+    var parkingLotLocation: ParkingLotLocation
+) {
+    fun modifyParkingLot(parkingLotInfo: ParkingLotInfo, parkingLotLocation: ParkingLotLocation) {
+        this.parkingLotInfo = parkingLotInfo
+        this.parkingLotLocation = parkingLotLocation
+    }
+}
 
 data class ParkingLotInfo(
     val name: String,

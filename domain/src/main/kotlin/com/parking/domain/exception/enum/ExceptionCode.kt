@@ -15,5 +15,6 @@ enum class ExceptionCode(
     MEMBER_NOT_MATCH("접속한 유저와 요청한 유저가 일치하지 않습니다."),
 
     //ParkingLot 관련
+    PARKING_LOT_ID_NULL_ERROR("주차장 ID가 없습니다."),
     PARKING_LOT_NOT_FOUND("주차장 정보를 찾을 수 없습니다.")
 }
