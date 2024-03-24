@@ -4,7 +4,7 @@ import com.parking.api.application.vo.ResponseCarInfoVO
 import com.parking.domain.entity.DibsOnParkingLotStatus
 import java.time.LocalDateTime
 
-data class ResonseCarInfoDTO(
+data class ResponseCarInfoDTO(
     val carId: Long? = null,
     var carNumber: String,
     val dibsOnParkingLotName: String? = null,
@@ -12,7 +12,7 @@ data class ResonseCarInfoDTO(
     var startDibsOnTime: LocalDateTime? = null
 ) {
     companion object {
-        fun from(carInfo: ResponseCarInfoVO) = ResonseCarInfoDTO(
+        fun from(carInfo: ResponseCarInfoVO) = ResponseCarInfoDTO(
             carId = carInfo.carId,
             carNumber = carInfo.carNumber,
             dibsOnParkingLotName = carInfo.dibsOnParkingLotName,
