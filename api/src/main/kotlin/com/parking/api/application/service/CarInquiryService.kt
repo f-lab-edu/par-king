@@ -26,7 +26,14 @@ class CarInquiryService(
         return getCarInfoVOFromCar(car)
     }
 
-    override fun findAllByMemberId(memberId: String): List<ResponseCarInfoVO> {
+    override fun findAllByMemberId(currentUserName: String, memberId: String): List<ResponseCarInfoVO> {
+        if (currentUserName.compareTo(memberId) != 0) {
+            throw MemberException(
+                MEMBER_NOT_MATCH,
+                MEMBER_NOT_MATCH.message
+            )
+        }
+
         val id = memberInquiryAdapter.findIdByMemberId(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message

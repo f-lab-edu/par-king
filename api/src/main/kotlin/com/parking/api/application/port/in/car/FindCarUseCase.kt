@@ -5,5 +5,5 @@ import com.parking.api.application.vo.ResponseCarInfoVO
 interface FindCarUseCase {
     fun findById(carId: Long): ResponseCarInfoVO
 
-    fun findAllByMemberId(memberId: String): List<ResponseCarInfoVO>
+    fun findAllByMemberId(currentUserName: String, memberId: String): List<ResponseCarInfoVO>
 }
