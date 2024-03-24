@@ -4,7 +4,7 @@ import com.parking.domain.entity.Car
 import com.parking.domain.entity.DibsOnParkingLotStatus
 import java.time.LocalDateTime
 
-data class CarInfoVO(
+data class ResponseCarInfoVO(
     val carId: Long? = null,
     var carNumber: String,
     val dibsOnParkingLotName: String? = null,
@@ -12,7 +12,7 @@ data class CarInfoVO(
     var startDibsOnTime: LocalDateTime? = null
 ) {
     companion object {
-        fun from(car: Car, parkingLotName: String?) = CarInfoVO(
+        fun from(car: Car, parkingLotName: String?) = ResponseCarInfoVO(
             carId = car.carId,
             carNumber = car.carNumber,
             dibsOnParkingLotName = parkingLotName,

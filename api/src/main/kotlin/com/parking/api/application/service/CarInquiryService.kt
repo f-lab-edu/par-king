@@ -4,7 +4,7 @@ import com.parking.api.adapter.out.CarInquiryAdapter
 import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.adapter.out.ParkingLotInquiryAdapter
 import com.parking.api.application.port.`in`.car.FindCarUseCase
-import com.parking.api.application.vo.CarInfoVO
+import com.parking.api.application.vo.ResponseCarInfoVO
 import com.parking.domain.entity.Car
 import com.parking.domain.exception.CarException
 import com.parking.domain.exception.MemberException
@@ -17,7 +17,7 @@ class CarInquiryService(
     private val parkingLotInquiryAdapter: ParkingLotInquiryAdapter,
     private val memberInquiryAdapter: MemberInquiryAdapter
 ): FindCarUseCase {
-    override fun findById(carId: Long): CarInfoVO {
+    override fun findById(carId: Long): ResponseCarInfoVO {
         val car = carInquiryAdapter.findById(carId) ?: throw CarException(
             CAR_NOT_FOUND,
             CAR_NOT_FOUND.message
@@ -26,7 +26,7 @@ class CarInquiryService(
         return getCarInfoVOFromCar(car)
     }
 
-    override fun findAllByMemberId(memberId: String): List<CarInfoVO> {
+    override fun findAllByMemberId(memberId: String): List<ResponseCarInfoVO> {
         val id = memberInquiryAdapter.findIdByMemberId(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message
@@ -39,10 +39,10 @@ class CarInquiryService(
         }
     }
 
-    private fun getCarInfoVOFromCar(car: Car): CarInfoVO {
+    private fun getCarInfoVOFromCar(car: Car): ResponseCarInfoVO {
         val dibsOnParkingLotName =
             car.dibsOnParkingLotId?.let { parkingLotInquiryAdapter.findById(it)?.getParkingLotName() }
 
-        return CarInfoVO.from(car, dibsOnParkingLotName)
+        return ResponseCarInfoVO.from(car, dibsOnParkingLotName)
     }
 }

@@ -1,6 +1,6 @@
 package com.parking.api.adapter.`in`
 
-import com.parking.api.adapter.`in`.dto.CarInfoDTO
+import com.parking.api.adapter.`in`.dto.ResonseCarInfoDTO
 import com.parking.api.application.port.`in`.car.FindCarUseCase
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,13 +17,13 @@ class CarInquiryController(
     @GetMapping("/find/{carId}")
     fun find(
         @PathVariable carId: Long
-    ): SuccessResponseDTO<CarInfoDTO> {
-        return SuccessResponseDTO.success(CarInfoDTO.from(findCarUseCase.findById(carId)))
+    ): SuccessResponseDTO<ResonseCarInfoDTO> {
+        return SuccessResponseDTO.success(ResonseCarInfoDTO.from(findCarUseCase.findById(carId)))
     }
     @GetMapping("/find/member")
     fun findByMember(
         @RequestParam memberId: String
-    ): SuccessResponseDTO<List<CarInfoDTO>> {
-        return SuccessResponseDTO.success(findCarUseCase.findAllByMemberId(memberId).map { CarInfoDTO.from(it) })
+    ): SuccessResponseDTO<List<ResonseCarInfoDTO>> {
+        return SuccessResponseDTO.success(findCarUseCase.findAllByMemberId(memberId).map { ResonseCarInfoDTO.from(it) })
     }
 }
