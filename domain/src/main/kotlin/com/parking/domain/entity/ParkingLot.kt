@@ -12,6 +12,10 @@ data class ParkingLot(
         this.parkingLotInfo = parkingLotInfo
         this.parkingLotLocation = parkingLotLocation
     }
+
+    fun getParkingLotName(): String {
+        return parkingLotInfo.name
+    }
 }
 
 data class ParkingLotInfo(

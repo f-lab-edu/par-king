@@ -16,5 +16,8 @@ enum class ExceptionCode(
 
     //ParkingLot 관련
     PARKING_LOT_ID_NULL_ERROR("주차장 ID가 없습니다."),
-    PARKING_LOT_NOT_FOUND("주차장 정보를 찾을 수 없습니다.")
+    PARKING_LOT_NOT_FOUND("주차장 정보를 찾을 수 없습니다."),
+
+    //Car 관련
+    CAR_NOT_FOUND("자동차 정보를 찾을 수 없습니다.")
 }
