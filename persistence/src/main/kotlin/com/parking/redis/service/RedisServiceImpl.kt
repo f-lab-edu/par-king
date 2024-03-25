@@ -1,5 +1,6 @@
 package com.parking.redis.service
 
+import org.redisson.api.RLock
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -25,5 +26,9 @@ class RedisServiceImp<T>(
 
     override fun deleteStringValues(pattern: String) {
         redissonClient.keys.deleteByPattern(pattern)
+    }
+
+    override fun getRLock(key: String): RLock {
+        return redissonClient.getLock(key)
     }
 }
