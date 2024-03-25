@@ -12,6 +12,7 @@ import com.parking.domain.exception.enum.ExceptionCode.*
 import mu.KLogging
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MemberCommandService(
@@ -20,6 +21,7 @@ class MemberCommandService(
     private val passwordEncoder: PasswordEncoder
 ): SaveMemberUseCase, ModifyMemberInfoUseCase, RevokeMemberUseCase {
 
+    @Transactional
     override fun saveMember(memberInfoVO: MemberInfoVO, password: String): MemberInfoVO {
         val member = memberInfoVO.toMember()
         member.password = passwordEncoder.encode(password)
@@ -28,6 +30,7 @@ class MemberCommandService(
         return MemberInfoVO.from(savedMember)
     }
 
+    @Transactional
     override fun modify(memberInfoVO: MemberInfoVO): MemberInfoVO {
         val member = findMember(memberInfoVO.memberId)
 
@@ -38,6 +41,7 @@ class MemberCommandService(
         return MemberInfoVO.from(savedMember)
     }
 
+    @Transactional
     override fun revoke(memberId: String): MemberInfoVO {
         val member = findMember(memberId)
 

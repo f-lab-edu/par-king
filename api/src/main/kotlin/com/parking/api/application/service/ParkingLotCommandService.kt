@@ -13,6 +13,7 @@ import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.ParkingLotException
 import com.parking.domain.exception.enum.ExceptionCode.*
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -21,6 +22,8 @@ class ParkingLotCommandService(
     private val parkingLotInquiryAdapter: ParkingLotInquiryAdapter,
     private val parkingLotCommandAdapter: ParkingLotCommandAdapter
 ): CreateParkingLotUseCase, DeleteParkingLotUseCase, ModifyParkingLotUseCase {
+
+    @Transactional
     override fun create(parkingLotInfoVO: ParkingLotInfoVO): ParkingLotInfoVO {
         val memberId = memberInquiryAdapter.findIdByMemberId(parkingLotInfoVO.memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
@@ -33,6 +36,7 @@ class ParkingLotCommandService(
         )
     }
 
+    @Transactional
     override fun delete(parkingLotId: Long) {
         val parkingLot = parkingLotInquiryAdapter.findById(parkingLotId) ?: throw ParkingLotException(
             PARKING_LOT_NOT_FOUND,
@@ -42,6 +46,7 @@ class ParkingLotCommandService(
         parkingLotCommandAdapter.deleteUpdate(parkingLot, LocalDateTime.now())
     }
 
+    @Transactional
     override fun modify(parkingLotInfoVO: ParkingLotInfoVO): ParkingLotInfoVO {
         if (parkingLotInfoVO.parkingLotId == null) throw ParkingLotException(
             PARKING_LOT_ID_NULL_ERROR,
