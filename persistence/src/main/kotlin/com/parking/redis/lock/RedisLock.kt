@@ -86,8 +86,8 @@ class RedisLockAspect(
     }
 
     companion object : KLogging() {
-        const val WAITING_TIME = 30_000L
-        const val RELEASE_TIME = 100_000L
+        const val WAITING_TIME = 300L
+        const val RELEASE_TIME = 5_000L
         const val PREFIX_KEY = "PARKING_LOCK_KEY_"
     }
 }
