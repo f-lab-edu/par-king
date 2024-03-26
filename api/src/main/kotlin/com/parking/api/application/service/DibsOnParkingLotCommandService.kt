@@ -11,6 +11,7 @@ import com.parking.domain.exception.DibsOnParkingLotException
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.ParkingLotException
 import com.parking.domain.exception.enum.ExceptionCode.*
+import com.parking.redis.lock.RedisLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -27,14 +28,15 @@ class DibsOnParkingLotCommandService(
     //TODO 피드백 받기 이게 맞나? transactional 이 너무 넓게 잡힌다 안좋은 설계같다 사실상 save 에만 걸면 되는데
     //TODO 저장할 부분이 조회를 통해서 가져와야하고 그 과정에서 Exception 처리도 필요하다
     @Transactional
-    override fun dibsOnParkingLot(dibsOnParkingLotVO: DibsOnParkingLotVO) {
+    @RedisLock("parkingLotId")
+    override fun dibsOnParkingLot(parkingLotId: Long, dibsOnParkingLotVO: DibsOnParkingLotVO) {
         val memberId = findAvailableMemberId(dibsOnParkingLotVO)
         val parkingLot = findAvailableParkingLot(dibsOnParkingLotVO)
         val car = findAvailableCar(dibsOnParkingLotVO)
 
         val dibsOnParkingLot = dibsOnParkingLotCommandAdapter.save(dibsOnParkingLotVO.to(memberId))
 
-        car.dibsOnParkingLot(parkingLot.parkingLotId!!, dibsOnParkingLot.dibsOnParkingLotId!!)
+        car.dibsOnParkingLot(parkingLotId, dibsOnParkingLot.dibsOnParkingLotId!!)
 
         parkingLotCommandAdapter.save(parkingLot)
         carCommandAdapter.save(car)

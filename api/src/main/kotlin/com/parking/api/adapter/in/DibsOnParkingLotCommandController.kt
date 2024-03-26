@@ -14,7 +14,7 @@ class DibsOnParkingLotCommandController(
     fun requestDibsOnParkingLot(
         @RequestBody dibsOnParkingLotDTO: DibsOnParkingLotDTO
     ): SuccessResponseDTO<Boolean> {
-        dibsOnParkingLotUseCase.dibsOnParkingLot(dibsOnParkingLotDTO.to())
+        dibsOnParkingLotUseCase.dibsOnParkingLot(dibsOnParkingLotDTO.parkingLotId, dibsOnParkingLotDTO.to())
 
         return SuccessResponseDTO.success(true)
     }
