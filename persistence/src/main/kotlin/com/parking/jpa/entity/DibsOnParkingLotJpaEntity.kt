@@ -9,7 +9,7 @@ import jakarta.persistence.*
 data class DibsOnParkingLotJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     @Column(name = "member_id")
     val memberId: Long,
@@ -32,4 +32,13 @@ data class DibsOnParkingLotJpaEntity(
         carId,
         currentStatus = currentStatus
     )
+
+    companion object {
+        fun from(dibsOnParkingLot: DibsOnParkingLot) = DibsOnParkingLotJpaEntity(
+            memberId = dibsOnParkingLot.memberId,
+            carId = dibsOnParkingLot.carId,
+            parkingLotId = dibsOnParkingLot.parkingLotId,
+            currentStatus = dibsOnParkingLot.currentStatus
+        )
+    }
 }

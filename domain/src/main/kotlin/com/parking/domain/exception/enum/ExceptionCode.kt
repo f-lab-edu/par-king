@@ -17,7 +17,11 @@ enum class ExceptionCode(
     //ParkingLot 관련
     PARKING_LOT_ID_NULL_ERROR("주차장 ID가 없습니다."),
     PARKING_LOT_NOT_FOUND("주차장 정보를 찾을 수 없습니다."),
+    PARKING_LOT_ALREADY_FULL("이미 주차장이 만석 입니다."),
 
     //Car 관련
-    CAR_NOT_FOUND("자동차 정보를 찾을 수 없습니다.")
+    CAR_NOT_FOUND("자동차 정보를 찾을 수 없습니다."),
+
+    //DibsOnParkingLot 관련
+    DIBS_ON_PARKING_LOT_NOT_AVAILABLE("현재 찜 기능을 이용할 수 없는 상태입니다.")
 }
