@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "member")
-data class MemberJpaEntity (
+data class MemberEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -42,7 +42,7 @@ data class MemberJpaEntity (
     )
 
     companion object {
-        fun from(member: Member) = MemberJpaEntity(
+        fun from(member: Member) = MemberEntity(
             id = member.id,
             memberId = member.memberInfo.memberId,
             password = member.password!!,

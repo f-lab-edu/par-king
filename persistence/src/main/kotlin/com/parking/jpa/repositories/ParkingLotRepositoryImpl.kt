@@ -1,7 +1,7 @@
 package com.parking.jpa.repositories
 
-import com.parking.jpa.entity.ParkingLotJpaEntity
-import com.parking.jpa.entity.ParkingLotJpaEntity.Companion.STANDARD_DELETED_AT_TIME
+import com.parking.jpa.entity.ParkingLotEntity
+import com.parking.jpa.entity.ParkingLotEntity.Companion.STANDARD_DELETED_AT_TIME
 import com.parking.jpa.entity.QParkingLotJpaEntity.Companion.parkingLotJpaEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 
 @Repository
-class ParkingLotJpaRepositoryImpl : QuerydslRepositorySupport(ParkingLotJpaEntity::class.java),
-    ParkingLotJpaRepositoryCustom {
-    override fun findAllByMemberId(memberId: Long, pageable: Pageable): Page<ParkingLotJpaEntity> {
+class ParkingLotRepositoryImpl : QuerydslRepositorySupport(ParkingLotEntity::class.java),
+    ParkingLotRepositoryCustom {
+    override fun findAllByMemberId(memberId: Long, pageable: Pageable): Page<ParkingLotEntity> {
         return from(parkingLotJpaEntity)
             .where(
                 parkingLotJpaEntity.memberId.eq(memberId)
@@ -26,7 +26,7 @@ class ParkingLotJpaRepositoryImpl : QuerydslRepositorySupport(ParkingLotJpaEntit
             }
     }
 
-    override fun findAllByLocation(cityName: String?, guName: String?, pageable: Pageable): Page<ParkingLotJpaEntity> {
+    override fun findAllByLocation(cityName: String?, guName: String?, pageable: Pageable): Page<ParkingLotEntity> {
         return from(parkingLotJpaEntity)
             .where(
                 parkingLotJpaEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME)
