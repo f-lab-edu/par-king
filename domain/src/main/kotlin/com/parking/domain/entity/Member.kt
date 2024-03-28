@@ -7,6 +7,7 @@ data class Member(
     val memberInfo: MemberInfo,
     var password: String? = null,
     val carIdList: List<Car> = listOf(),
+    //내가 소유중인 주차장 리스트
     val parkingLotIdList: List<ParkingLot> = listOf(),
     val dibsOnParkingLotList: List<DibsOnParkingLot> = listOf(),
     val noShowList: List<NoShow> = listOf(),

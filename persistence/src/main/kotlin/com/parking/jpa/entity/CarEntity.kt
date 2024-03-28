@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "car")
-data class CarJpaEntity (
+data class CarEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -39,4 +39,16 @@ data class CarJpaEntity (
         dibsOnParkingLotId = dibsOnParkingLotId,
         dibsOnParkingLotStatus = dibsOnParkingLotStatus
     )
+
+    companion object {
+        fun from(car: Car) = CarEntity(
+            id = car.carId,
+            carNumber = car.carNumber,
+            memberId = car.memberId,
+            parkingLotId = car.parkingLotId,
+            dibsOnParkingLotId = car.dibsOnParkingLotId,
+            dibsOnParkingLotStatus = car.dibsOnParkingLotStatus,
+            startDibsOnTime = car.startDibsOnTime
+        )
+    }
 }

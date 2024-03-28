@@ -13,7 +13,7 @@ import kotlin.random.Random
 
 @Entity
 @Table(name = "parking_lot")
-data class ParkingLotJpaEntity(
+data class ParkingLotEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -58,7 +58,7 @@ data class ParkingLotJpaEntity(
     companion object {
         val STANDARD_DELETED_AT_TIME = LocalDateTime.ofEpochSecond(0L, 0, ZoneOffset.UTC)
 
-        fun from(parkingLot: ParkingLot, deletedAt: LocalDateTime?): ParkingLotJpaEntity {
+        fun from(parkingLot: ParkingLot, deletedAt: LocalDateTime?): ParkingLotEntity {
             val RANDOM_RANGE = 60L * 60 * 24 * 365 * 5
 
             val random = Random.nextLong(RANDOM_RANGE)
@@ -67,7 +67,7 @@ data class ParkingLotJpaEntity(
             val parkingLotInfo = parkingLot.parkingLotInfo
             val parkingLotLocation = parkingLot.parkingLotLocation
 
-            return ParkingLotJpaEntity(
+            return ParkingLotEntity(
                 id = parkingLot.parkingLotId,
                 memberId = parkingLot.memberId,
                 name = parkingLotInfo.name,
