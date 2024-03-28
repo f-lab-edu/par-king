@@ -2,7 +2,7 @@ package com.parking.jpa.repositories
 
 import com.parking.jpa.entity.ParkingLotEntity
 import com.parking.jpa.entity.ParkingLotEntity.Companion.STANDARD_DELETED_AT_TIME
-import com.parking.jpa.entity.QParkingLotJpaEntity.Companion.parkingLotJpaEntity
+import com.parking.jpa.entity.QParkingLotEntity.Companion.parkingLotEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Repository
 class ParkingLotRepositoryImpl : QuerydslRepositorySupport(ParkingLotEntity::class.java),
     ParkingLotRepositoryCustom {
     override fun findAllByMemberId(memberId: Long, pageable: Pageable): Page<ParkingLotEntity> {
-        return from(parkingLotJpaEntity)
+        return from(parkingLotEntity)
             .where(
-                parkingLotJpaEntity.memberId.eq(memberId)
-                    .and(parkingLotJpaEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME))
+                parkingLotEntity.memberId.eq(memberId)
+                    .and(parkingLotEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME))
             )
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -27,11 +27,11 @@ class ParkingLotRepositoryImpl : QuerydslRepositorySupport(ParkingLotEntity::cla
     }
 
     override fun findAllByLocation(cityName: String?, guName: String?, pageable: Pageable): Page<ParkingLotEntity> {
-        return from(parkingLotJpaEntity)
+        return from(parkingLotEntity)
             .where(
-                parkingLotJpaEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME)
-                    .and(cityName?.let { parkingLotJpaEntity.cityName.eq(it) })
-                    .and(guName?.let { parkingLotJpaEntity.guName.eq(it) })
+                parkingLotEntity.deletedAt.lt(STANDARD_DELETED_AT_TIME)
+                    .and(cityName?.let { parkingLotEntity.cityName.eq(it) })
+                    .and(guName?.let { parkingLotEntity.guName.eq(it) })
             )
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
