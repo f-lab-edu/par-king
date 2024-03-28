@@ -1,10 +1,10 @@
 package com.parking.api.application.service
 
-import com.parking.api.adapter.out.MemberCommandAdapter
-import com.parking.api.adapter.out.MemberInquiryAdapter
 import com.parking.api.application.port.`in`.member.ModifyMemberInfoUseCase
 import com.parking.api.application.port.`in`.member.RevokeMemberUseCase
 import com.parking.api.application.port.`in`.member.SaveMemberUseCase
+import com.parking.api.application.port.out.FindMemberPort
+import com.parking.api.application.port.out.SaveMemberPort
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
 import com.parking.domain.exception.MemberException
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MemberCommandService(
-    private val memberInquiryAdapter: MemberInquiryAdapter,
-    private val memberCommandAdapter: MemberCommandAdapter,
+    private val findMemberPort: FindMemberPort,
+    private val saveMemberPort: SaveMemberPort,
     private val passwordEncoder: PasswordEncoder
 ): SaveMemberUseCase, ModifyMemberInfoUseCase, RevokeMemberUseCase {
 
@@ -58,14 +58,14 @@ class MemberCommandService(
     }
 
     private fun saveMember(member: Member): Member {
-        return memberCommandAdapter.saveMember(member) ?: throw MemberException(
+        return saveMemberPort.saveMember(member) ?: throw MemberException(
             MEMBER_SAVE_ERROR,
             MEMBER_SAVE_ERROR.message
         )
     }
 
     private fun findMember(memberId: String): Member {
-        return memberInquiryAdapter.findMemberInfoByMemberId(memberId) ?: throw MemberException(
+        return findMemberPort.findMemberInfoByMemberId(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message
         )

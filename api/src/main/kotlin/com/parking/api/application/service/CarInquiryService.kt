@@ -1,9 +1,9 @@
 package com.parking.api.application.service
 
-import com.parking.api.adapter.out.CarInquiryAdapter
-import com.parking.api.adapter.out.MemberInquiryAdapter
-import com.parking.api.adapter.out.ParkingLotInquiryAdapter
 import com.parking.api.application.port.`in`.car.FindCarUseCase
+import com.parking.api.application.port.out.FindCarPort
+import com.parking.api.application.port.out.FindMemberPort
+import com.parking.api.application.port.out.FindParkingLotPort
 import com.parking.api.application.vo.ResponseCarInfoVO
 import com.parking.domain.entity.Car
 import com.parking.domain.exception.CarException
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class CarInquiryService(
-    private val carInquiryAdapter: CarInquiryAdapter,
-    private val parkingLotInquiryAdapter: ParkingLotInquiryAdapter,
-    private val memberInquiryAdapter: MemberInquiryAdapter
+    private val findCarPort: FindCarPort,
+    private val findParkingLotPort: FindParkingLotPort,
+    private val findMemberPort: FindMemberPort
 ): FindCarUseCase {
     override fun findById(carId: Long): ResponseCarInfoVO {
-        val car = carInquiryAdapter.findById(carId) ?: throw CarException(
+        val car = findCarPort.findById(carId) ?: throw CarException(
             CAR_NOT_FOUND,
             CAR_NOT_FOUND.message
         )
@@ -34,12 +34,12 @@ class CarInquiryService(
             )
         }
 
-        val id = memberInquiryAdapter.findIdByMemberId(memberId) ?: throw MemberException(
+        val id = findMemberPort.findIdByMemberId(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message
         )
 
-        val carList = id.let {carInquiryAdapter.findAllByMemberId(it) }
+        val carList = id.let {findCarPort.findAllByMemberId(it) }
 
         return carList.map {
             getCarInfoVOFromCar(it)
@@ -48,7 +48,7 @@ class CarInquiryService(
 
     private fun getCarInfoVOFromCar(car: Car): ResponseCarInfoVO {
         val dibsOnParkingLotName =
-            car.dibsOnParkingLotId?.let { parkingLotInquiryAdapter.findById(it)?.getParkingLotName() }
+            car.dibsOnParkingLotId?.let { findParkingLotPort.findById(it)?.getParkingLotName() }
 
         return ResponseCarInfoVO.from(car, dibsOnParkingLotName)
     }
