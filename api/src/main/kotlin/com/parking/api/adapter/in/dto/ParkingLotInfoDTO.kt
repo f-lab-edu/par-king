@@ -5,6 +5,7 @@ import java.math.BigDecimal
 
 data class ParkingLotInfoDTO(
     val memberId: String,
+    val parkingLotId: Long? = null,
     val name: String,
     val fullAddress: String? = null,
     val totalSpace: Long,
@@ -17,6 +18,21 @@ data class ParkingLotInfoDTO(
     val guName: String
 ) {
     fun to() = ParkingLotInfoVO(
-        memberId, name, fullAddress, totalSpace, occupiedSpace, cost, extraCost, cityName, guName
+        memberId, parkingLotId, name, fullAddress, totalSpace, occupiedSpace, cost, extraCost, cityName, guName
     )
+
+    companion object {
+        fun from(parkingLot: ParkingLotInfoVO) = ParkingLotInfoDTO(
+            memberId = parkingLot.memberId,
+            parkingLotId = parkingLot.parkingLotId,
+            name = parkingLot.name,
+            fullAddress = parkingLot.fullAddress,
+            totalSpace = parkingLot.totalSpace,
+            occupiedSpace = parkingLot.occupiedSpace,
+            cost = parkingLot.cost,
+            extraCost = parkingLot.extraCost,
+            cityName = parkingLot.cityName,
+            guName = parkingLot.guName
+        )
+    }
 }

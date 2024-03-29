@@ -1,12 +1,12 @@
 package com.parking.jpa.entity
 
-import com.parking.domain.entity.DibsOnParkingLot
-import com.parking.domain.entity.DibsOnParkingLotStatus
+import com.parking.domain.entity.NoShow
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
-@Table(name = "dibs_on_parking_lot")
-data class DibsOnParkingLotJpaEntity(
+@Table(name = "no_show")
+data class NoShowEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -20,16 +20,15 @@ data class DibsOnParkingLotJpaEntity(
     @Column(name = "parking_lot_id")
     val parkingLotId: Long,
 
-    @Column(name = "current_status")
-    @Enumerated(value = EnumType.STRING)
-    val currentStatus: DibsOnParkingLotStatus
+    @Column(name = "no_show_time")
+    val noShowTime: LocalDateTime = LocalDateTime.now()
 
 ) : BaseEntity() {
-    fun to() = DibsOnParkingLot(
-        dibsOnParkingLotId = id,
+    fun to() = NoShow(
+        noShowId = id,
         memberId,
         parkingLotId,
         carId,
-        currentStatus = currentStatus
+        noShowTime
     )
 }

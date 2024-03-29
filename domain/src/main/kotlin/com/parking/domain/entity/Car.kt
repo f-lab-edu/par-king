@@ -7,7 +7,14 @@ data class Car (
     var carNumber: String,
     val memberId: Long,
     var parkingLotId: Long? = null,
-    val dibsOnParkingLotId: Long? = null,
+    var dibsOnParkingLotId: Long? = null,
     var dibsOnParkingLotStatus: DibsOnParkingLotStatus? = null,
     var startDibsOnTime: LocalDateTime? = null
-)
+) {
+    fun dibsOnParkingLot(parkingLotId: Long, dibsOnParkingLotId: Long) {
+        this.parkingLotId = parkingLotId
+        this.dibsOnParkingLotId = dibsOnParkingLotId
+        this.startDibsOnTime = LocalDateTime.now()
+        this.dibsOnParkingLotStatus = DibsOnParkingLotStatus.DIBS_ON_PARKING_LOT
+    }
+}

@@ -4,7 +4,7 @@ import com.parking.domain.entity.ParkingLot
 import java.time.LocalDateTime
 
 interface SaveParkingLotPort {
-    fun save(parkingLot: ParkingLot)
+    fun save(parkingLot: ParkingLot): ParkingLot
 
-    fun update(parkingLot: ParkingLot, deletedAt: LocalDateTime)
+    fun deleteUpdate(parkingLot: ParkingLot, deletedAt: LocalDateTime)
 }

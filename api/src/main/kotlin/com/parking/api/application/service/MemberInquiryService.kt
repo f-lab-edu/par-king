@@ -37,6 +37,15 @@ class MemberInquiryService(
         return MemberInfoVO.from(member)
     }
 
+    override fun findIdByMemberId(memberId: String): Long {
+        val id = findMemberPort.findIdByMemberId(memberId) ?: throw MemberException(
+            MEMBER_NOT_FOUND,
+            MEMBER_NOT_FOUND.message
+        )
+
+        return id
+    }
+
     override fun signIn(memberId: String, password: String): Token {
         // 인증 실패 횟수 조회
         if (!checkPasswordTryCount(memberId)) {
