@@ -34,6 +34,10 @@ data class Member(
     fun isRevoked(): Boolean {
         return memberStatus == MemberStatus.REVOKED
     }
+
+    fun makeNoShow() {
+        noShowCount++
+    }
 }
 
 data class MemberInfo(
