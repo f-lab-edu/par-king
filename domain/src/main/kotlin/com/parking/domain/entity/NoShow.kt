@@ -8,4 +8,8 @@ data class NoShow(
     val parkingLotId: Long,
     val carId: Long,
     val noShowTime: LocalDateTime
-)
+) {
+    companion object {
+        const val NO_SHOW_LIMIT_SECOND = 30 * 60
+    }
+}
