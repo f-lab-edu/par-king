@@ -38,16 +38,16 @@ class NoShowCommandService(
         val currentTime = LocalDateTime.now()
 
         //가장 최근 noShow time 과 현재 시간을 비교해서 15분 이내에 No Show 가 된 적이 있으면 잘못 요청된 NoShow 이다
-        val duration = recentNoShow?.let {
-            Duration.between(it.noShowTime, currentTime)
-        }
+        recentNoShow?.let {
+            val duration = Duration.between(it.noShowTime, currentTime)
 
-        //같은 memberId, carId 로 limit 시간 안에 또 다른 요청이 오는것은 invalid 요청이므로 Exception 발생
-        if (duration?.seconds!! <= NO_SHOW_LIMIT_SECOND) {
-            throw NoShowException(
-                NO_SHOW_INVALID_REQUEST,
-                NO_SHOW_INVALID_REQUEST.message
-            )
+            //같은 memberId, carId 로 limit 시간 안에 또 다른 요청이 오는것은 invalid 요청이므로 Exception 발생
+            if (duration.seconds <= NO_SHOW_LIMIT_SECOND) {
+                throw NoShowException(
+                    NO_SHOW_INVALID_REQUEST,
+                    NO_SHOW_INVALID_REQUEST.message
+                )
+            }
         }
 
         val newNoShow =
