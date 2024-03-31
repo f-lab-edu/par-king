@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 data class NoShowEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     @Column(name = "member_id")
     val memberId: Long,
@@ -31,4 +31,14 @@ data class NoShowEntity(
         carId,
         noShowTime
     )
+
+    companion object {
+        fun from(noShow: NoShow) = NoShowEntity(
+            id = noShow.noShowId,
+            memberId = noShow.memberId,
+            carId = noShow.carId,
+            parkingLotId = noShow.parkingLotId,
+            noShowTime = noShow.noShowTime
+        )
+    }
 }
