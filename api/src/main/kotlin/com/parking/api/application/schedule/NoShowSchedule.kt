@@ -4,11 +4,13 @@ import com.parking.api.adapter.out.DibsOnParkingLotInquiryAdapter
 import com.parking.api.application.port.`in`.noShow.SaveNoShowUseCase
 import com.parking.domain.entity.DibsOnParkingLot
 import com.parking.domain.entity.DibsOnParkingLotStatus
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
+@Profile(value=["schedule"])
 class NoShowSchedule(
     private val dibsOnParkingLotInquiryAdapter: DibsOnParkingLotInquiryAdapter,
     private val saveNoShowUseCase: SaveNoShowUseCase
