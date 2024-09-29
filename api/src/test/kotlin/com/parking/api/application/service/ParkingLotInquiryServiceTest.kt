@@ -3,6 +3,7 @@ package com.parking.api.application.service
 import com.parking.api.application.port.out.FindMemberPort
 import com.parking.api.application.port.out.FindParkingLotPort
 import com.parking.api.application.vo.ParkingLotListInfoVO
+import com.parking.api.application.vo.ParkingLotLocationVO
 import com.parking.domain.entity.ParkingLot
 import com.parking.domain.entity.ParkingLotInfo
 import com.parking.domain.entity.ParkingLotLocation
@@ -68,7 +69,29 @@ class ParkingLotInquiryServiceTest : BehaviorSpec() {
                     realResult.forEach() {
                         Assertions.assertEquals(it, expectedResult)
                     }
+                }
+            }
+        }
 
+        Given("지역 정보가 주어진 경우") {
+            val location = ParkingLotLocationVO("Seoul", "Gang-nam")
+            val page = PageRequest.of(0, 5)
+
+            When("주차장 정보가 존재할 때") {
+                val parkingLotLocation = ParkingLotLocation("Seoul", "Gang-nam")
+                val emptyParkingLotInfo = ParkingLotInfo("full-parkingLot", null, 10L, 0L)
+                val emptyParkingLot = ParkingLot(1L, 1L, emptyParkingLotInfo, parkingLotLocation)
+                val pageResult = PageImpl(listOf(emptyParkingLot), page, 1L)
+
+                every { findParkingLotPort.findAllByLocation(any(), any()) } returns pageResult
+
+                Then("주차장 정보들을 반환한다.") {
+                    val realResult = parkingLotInquiryService.findAllByLocation(location, page)
+                    val expectedResult = ParkingLotListInfoVO.from(emptyParkingLot)
+
+                    realResult.forEach() {
+                        Assertions.assertEquals(it, expectedResult)
+                    }
                 }
             }
         }
