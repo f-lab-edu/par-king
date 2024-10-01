@@ -35,6 +35,7 @@ data class DibsOnParkingLotEntity(
 
     companion object {
         fun from(dibsOnParkingLot: DibsOnParkingLot) = DibsOnParkingLotEntity(
+            id = dibsOnParkingLot.dibsOnParkingLotId,
             memberId = dibsOnParkingLot.memberId,
             carId = dibsOnParkingLot.carId,
             parkingLotId = dibsOnParkingLot.parkingLotId,

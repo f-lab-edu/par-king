@@ -1,10 +1,8 @@
 package com.parking.api.application.service
 
-import com.parking.api.adapter.out.MemberCommandAdapter
-import com.parking.api.adapter.out.MemberInquiryAdapter
-import com.parking.api.adapter.out.NoShowCommandAdapter
-import com.parking.api.adapter.out.NoShowInquiryAdapter
+import com.parking.api.adapter.out.*
 import com.parking.api.application.port.`in`.noShow.SaveNoShowUseCase
+import com.parking.domain.entity.DibsOnParkingLot
 import com.parking.domain.entity.NoShow
 import com.parking.domain.entity.NoShow.Companion.NO_SHOW_LIMIT_SECOND
 import com.parking.domain.exception.MemberException
@@ -21,20 +19,21 @@ class NoShowCommandService(
     private val memberInquiryAdapter: MemberInquiryAdapter,
     private val memberCommandAdapter: MemberCommandAdapter,
     private val noShowInquiryAdapter: NoShowInquiryAdapter,
-    private val noShowCommandAdapter: NoShowCommandAdapter
+    private val noShowCommandAdapter: NoShowCommandAdapter,
+    private val dibsOnParkingLotCommandAdapter: DibsOnParkingLotCommandAdapter
 ): SaveNoShowUseCase {
 
     @Transactional
     @RedisLock("memberId")
-    override fun save(memberId: String, parkingLotId: Long, carId: Long) {
-        val member = memberInquiryAdapter.findMemberInfoByMemberId(memberId) ?: throw MemberException(
+    override fun save(memberId: Long, dibsOnParkingLot: DibsOnParkingLot) {
+        val member = memberInquiryAdapter.findById(memberId) ?: throw MemberException(
             MEMBER_NOT_FOUND,
             MEMBER_NOT_FOUND.message
         )
 
         member.makeNoShow()
 
-        val recentNoShow = noShowInquiryAdapter.findRecentlyNoShow(member.id!!, carId)
+        val recentNoShow = noShowInquiryAdapter.findRecentlyNoShow(member.id!!, dibsOnParkingLot.carId)
         val currentTime = LocalDateTime.now()
 
         //가장 최근 noShow time 과 현재 시간을 비교해서 15분 이내에 No Show 가 된 적이 있으면 잘못 요청된 NoShow 이다
@@ -51,9 +50,17 @@ class NoShowCommandService(
         }
 
         val newNoShow =
-            NoShow(memberId = member.id!!, parkingLotId = parkingLotId, carId = carId, noShowTime = LocalDateTime.now())
+            NoShow(
+                memberId = member.id!!,
+                parkingLotId = dibsOnParkingLot.parkingLotId,
+                carId = dibsOnParkingLot.carId,
+                noShowTime = LocalDateTime.now()
+            )
+
+        dibsOnParkingLot.changeNoShow()
 
         memberCommandAdapter.saveMember(member)
         noShowCommandAdapter.save(newNoShow)
+        dibsOnParkingLotCommandAdapter.save(dibsOnParkingLot)
     }
 }

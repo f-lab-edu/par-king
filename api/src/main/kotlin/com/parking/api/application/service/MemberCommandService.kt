@@ -9,7 +9,6 @@ import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.enum.ExceptionCode.*
-import mu.KLogging
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -70,5 +69,4 @@ class MemberCommandService(
             MEMBER_NOT_FOUND.message
         )
     }
-    companion object : KLogging()
 }
