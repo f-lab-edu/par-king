@@ -49,8 +49,17 @@ class ParkingLotCommandServiceTest : BehaviorSpec() {
         }
 
         Given("ParkingLotInfoVO가 주어진 경우") {
-            val parkingLotInfoVO = ParkingLotInfoVO(
+            val noIdParkingLotInfoVO = ParkingLotInfoVO(
                 "User1",
+                name = "주차장1",
+                totalSpace = 10L,
+                cityName = "Seoul",
+                guName = "Gang-nam"
+            )
+
+            val existIdParkingLotInfoVO = ParkingLotInfoVO(
+                "User1",
+                parkingLotId = 1L,
                 name = "주차장1",
                 totalSpace = 10L,
                 cityName = "Seoul",
@@ -63,26 +72,45 @@ class ParkingLotCommandServiceTest : BehaviorSpec() {
 
                 Then("Exception 발생") {
                     assertThrows<MemberException> {
-                        parkingLotCommandService.create(parkingLotInfoVO)
+                        parkingLotCommandService.create(noIdParkingLotInfoVO)
                     }
                 }
             }
 
             When("생성할 때") {
 
-                val parkingLot = parkingLotInfoVO.toParkingLot(1L)
+                val parkingLot = noIdParkingLotInfoVO.toParkingLot(1L)
 
                 every { findMemberPort.findIdByMemberId(any()) } returns 1L
                 every { saveParkingLotPort.save(any()) } returns parkingLot
 
                 Then("생성 된다") {
-                    val realResult = parkingLotCommandService.create(parkingLotInfoVO)
+                    val realResult = parkingLotCommandService.create(noIdParkingLotInfoVO)
                     val expectedResult = ParkingLotInfoVO.from(
-                        parkingLotInfoVO.memberId,
+                        noIdParkingLotInfoVO.memberId,
                         parkingLot
                     )
 
                     Assertions.assertEquals(expectedResult, realResult)
+                }
+            }
+
+            When("수정할 때, ParkingLotId VO에 없는 경우") {
+                Then("Exception 발생") {
+                    assertThrows<ParkingLotException> {
+                        parkingLotCommandService.modify(noIdParkingLotInfoVO)
+                    }
+                }
+            }
+
+            When("수정할 때, ParkingLotId 가 DB에 없는 경우") {
+
+                every { findParkingLotPort.findById(any()) } returns null
+
+                Then("Exception 발생") {
+                    assertThrows<ParkingLotException> {
+                        parkingLotCommandService.modify(existIdParkingLotInfoVO)
+                    }
                 }
             }
         }
