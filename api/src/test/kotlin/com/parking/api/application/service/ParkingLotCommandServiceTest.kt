@@ -4,6 +4,8 @@ import com.parking.api.application.port.out.FindMemberPort
 import com.parking.api.application.port.out.FindParkingLotPort
 import com.parking.api.application.port.out.SaveParkingLotPort
 import com.parking.api.application.vo.ParkingLotInfoVO
+import com.parking.domain.entity.ParkingLotInfo
+import com.parking.domain.entity.ParkingLotLocation
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.ParkingLotException
 import io.kotest.core.spec.IsolationMode
@@ -111,6 +113,31 @@ class ParkingLotCommandServiceTest : BehaviorSpec() {
                     assertThrows<ParkingLotException> {
                         parkingLotCommandService.modify(existIdParkingLotInfoVO)
                     }
+                }
+            }
+
+            When("수정하는 경우") {
+                val parkingLot = existIdParkingLotInfoVO.toParkingLot(1L)
+                val parkingLotInfo = ParkingLotInfo(
+                    existIdParkingLotInfoVO.name,
+                    existIdParkingLotInfoVO.fullAddress,
+                    existIdParkingLotInfoVO.totalSpace,
+                    existIdParkingLotInfoVO.occupiedSpace,
+                    existIdParkingLotInfoVO.cost,
+                    existIdParkingLotInfoVO.extraCost
+                )
+                val parkingLotLocation = ParkingLotLocation(existIdParkingLotInfoVO.cityName, existIdParkingLotInfoVO.guName)
+
+                parkingLot.modifyParkingLot(parkingLotInfo, parkingLotLocation)
+
+                every { findParkingLotPort.findById(any()) } returns parkingLot
+                every { saveParkingLotPort.save(parkingLot) } returns parkingLot
+
+                Then("수정이 된다") {
+                    val realResult = parkingLotCommandService.modify(existIdParkingLotInfoVO)
+                    val expectedResult = ParkingLotInfoVO.from(existIdParkingLotInfoVO.memberId, parkingLot)
+
+                    Assertions.assertEquals(expectedResult, realResult)
                 }
             }
         }
