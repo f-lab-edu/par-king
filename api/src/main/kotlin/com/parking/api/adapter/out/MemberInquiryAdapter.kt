@@ -4,6 +4,7 @@ import com.parking.api.application.port.out.FindMemberPort
 import com.parking.domain.entity.Member
 import com.parking.jpa.repositories.MemberRepository
 import org.springframework.stereotype.Component
+import kotlin.jvm.optionals.getOrNull
 
 @Component
 class MemberInquiryAdapter(
@@ -15,5 +16,9 @@ class MemberInquiryAdapter(
 
     override fun findIdByMemberId(memberId: String): Long? {
         return memberRepository.findIdByMemberId(memberId)
+    }
+
+    override fun findById(memberId: Long): Member? {
+        return memberRepository.findById(memberId).getOrNull()?.to()
     }
 }

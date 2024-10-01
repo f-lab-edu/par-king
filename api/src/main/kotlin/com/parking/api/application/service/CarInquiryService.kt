@@ -39,7 +39,7 @@ class CarInquiryService(
             MEMBER_NOT_FOUND.message
         )
 
-        val carList = id.let {findCarPort.findAllByMemberId(it) }
+        val carList = id.let { findCarPort.findAllByMemberId(it) }
 
         return carList.map {
             getCarInfoVOFromCar(it)

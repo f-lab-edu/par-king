@@ -6,4 +6,6 @@ interface FindMemberPort {
     fun findMemberInfoByMemberId(memberId: String) : Member?
 
     fun findIdByMemberId(memberId: String): Long?
+
+    fun findById(memberId: Long): Member?
 }
