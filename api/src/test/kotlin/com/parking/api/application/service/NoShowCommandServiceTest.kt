@@ -65,6 +65,41 @@ class NoShowCommandServiceTest : BehaviorSpec() {
                     }
                 }
             }
+
+            When("최근 Noshow 가 없는경우 새로운 noShow 생성") {
+                val member = Member(id = 1L,
+                    memberInfo = MemberInfo(memberId = "User1", name = "UserName", email = "User@User.com")
+                )
+
+                every { findMemberPort.findById(any()) } returns member
+                every { findNoShowPort.findRecentlyNoShow(any(), any()) } returns null
+
+                every { saveMemberPort.saveMember(any()) } returns mockk()
+                every { saveNoShowPort.save(any()) } returns mockk()
+                every { saveDibsOnParkingLotPort.save(any()) } returns mockk()
+
+                Then("정상 Noshow 생성") {
+                    noShowCommandService.save(memberId, dibsOnParkingLot)
+                }
+            }
+
+            When("최근 Noshow 가 있지만 최근 limitTime 보다 긴 경우 새로운 noShow 생성") {
+                val member = Member(id = 1L,
+                    memberInfo = MemberInfo(memberId = "User1", name = "UserName", email = "User@User.com")
+                )
+                val noShow = NoShow(null, memberId, 1L, 1L, LocalDateTime.now().minusDays(1L))
+
+                every { findMemberPort.findById(any()) } returns member
+                every { findNoShowPort.findRecentlyNoShow(any(), any()) } returns noShow
+
+                every { saveMemberPort.saveMember(any()) } returns mockk()
+                every { saveNoShowPort.save(any()) } returns mockk()
+                every { saveDibsOnParkingLotPort.save(any()) } returns mockk()
+
+                Then("정상 Noshow 생성") {
+                    noShowCommandService.save(memberId, dibsOnParkingLot)
+                }
+            }
         }
     }
 }
