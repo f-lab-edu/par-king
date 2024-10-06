@@ -4,10 +4,12 @@ import com.parking.api.application.port.out.*
 import com.parking.domain.entity.*
 import com.parking.domain.exception.MemberException
 import com.parking.domain.exception.NoShowException
+import com.parking.domain.exception.enum.ExceptionCode.MEMBER_NOT_FOUND
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDateTime
 
@@ -44,9 +46,11 @@ class NoShowCommandServiceTest : BehaviorSpec() {
                 every { findMemberPort.findById(any()) } returns null
 
                 Then("Exception 발생") {
-                    assertThrows<MemberException> {
+                    val result = assertThrows<MemberException> {
                         noShowCommandService.save(memberId, dibsOnParkingLot)
                     }
+                    Assertions.assertEquals(result.exceptionCode, MEMBER_NOT_FOUND)
+                    Assertions.assertEquals(result.message, MEMBER_NOT_FOUND.message)
                 }
             }
 
