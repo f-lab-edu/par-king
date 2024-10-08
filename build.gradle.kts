@@ -66,9 +66,10 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
-        testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
+        testImplementation("io.kotest:kotest-runner-junit5:5.4.2")
         testImplementation("io.mockk:mockk:1.12.0")
         testImplementation("io.kotest:kotest-property:4.6.1")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     }
 
     tasks.withType<KotlinCompile> {
