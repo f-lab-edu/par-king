@@ -117,5 +117,116 @@ class MemberInquiryServiceTest : BehaviorSpec() {
                 }
             }
         }
+
+        Given("id, password 가 주어진 경우") {
+            val memberId = "user1"
+            val password = "password"
+            val memberTryStringList = mutableListOf<String>()
+            val tryString = "user1 try password but fail"
+            val member = Member(id = 1L, password = "password",
+                memberInfo = MemberInfo(memberId = "User1", name = "UserName", email = "User@User.com")
+            )
+
+            When("인증 시도 횟수가 초과한 경우") {
+                for(i in 1..Member.LIMIT_PASSWORD_TRY_COUNT+1) {
+                    memberTryStringList.addLast(tryString)
+                }
+
+                every { redisService.getStringValues(any()) } returns memberTryStringList
+
+                Then("Exception 발생") {
+                    assertThrows<MemberException> {
+                        memberInquiryService.signIn(memberId, password)
+                    }
+                }
+            }
+
+            When("Member 정보가 db에 없는 경우") {
+                for(i in 1..<Member.LIMIT_PASSWORD_TRY_COUNT) {
+                    memberTryStringList.addLast(tryString)
+                }
+
+                every { redisService.getStringValues(any()) } returns memberTryStringList
+                every { findMemberPort.findMemberInfoByMemberId(any()) } returns null
+
+                Then("Exception 발생") {
+                    assertThrows<MemberException> {
+                        memberInquiryService.signIn(memberId, password)
+                    }
+                }
+            }
+
+            When("비밀번호가 일치하지 않는 경우") {
+                for(i in 1..<Member.LIMIT_PASSWORD_TRY_COUNT) {
+                    memberTryStringList.addLast(tryString)
+                }
+
+                every { redisService.getStringValues(any()) } returns memberTryStringList
+                every { findMemberPort.findMemberInfoByMemberId(any()) } returns member
+                every { passwordEncoder.matches(any(), any()) } returns false
+                every { redisService.set(any(), any()) } returns mockk()
+
+                Then("Exception 발생") {
+                    assertThrows<MemberException> {
+                        memberInquiryService.signIn(memberId, password)
+                    }
+                }
+            }
+
+            When("비밀번호가 일치하지 않는 경우") {
+                for(i in 1..<Member.LIMIT_PASSWORD_TRY_COUNT) {
+                    memberTryStringList.addLast(tryString)
+                }
+
+                every { redisService.getStringValues(any()) } returns memberTryStringList
+                every { findMemberPort.findMemberInfoByMemberId(any()) } returns member
+                every { passwordEncoder.matches(any(), any()) } returns false
+                every { redisService.set(any(), any()) } returns mockk()
+
+                Then("Exception 발생") {
+                    assertThrows<MemberException> {
+                        memberInquiryService.signIn(memberId, password)
+                    }
+                }
+            }
+
+            When("인증에서 실패한 경우 경우") {
+                for(i in 1..<Member.LIMIT_PASSWORD_TRY_COUNT) {
+                    memberTryStringList.addLast(tryString)
+                }
+
+                every { redisService.getStringValues(any()) } returns memberTryStringList
+                every { findMemberPort.findMemberInfoByMemberId(any()) } returns member
+                every { passwordEncoder.matches(any(), any()) } returns true
+                every { redisService.deleteStringValues(any()) } returns mockk()
+                every { authenticationManager.authenticate(any()) } throws Exception()
+
+                Then("Exception 발생") {
+                    assertThrows<MemberException> {
+                        memberInquiryService.signIn(memberId, password)
+                    }
+                }
+            }
+
+            When("signIn 셩공한 경우") {
+                val accessToken = "accessToken"
+                val refreshToken = "refreshToken"
+
+                every { redisService.getStringValues(any()) } returns listOf()
+                every { findMemberPort.findMemberInfoByMemberId(any()) } returns member
+                every { passwordEncoder.matches(any(), any()) } returns true
+                every { redisService.deleteStringValues(any()) } returns mockk()
+                every { authenticationManager.authenticate(any()) } returns mockk()
+                every { jwtTokenProvider.createAccessToken(any()) } returns accessToken
+                every { jwtTokenProvider.createRefreshToken(any()) } returns refreshToken
+
+                Then("토큰 발행") {
+                    val realResult = memberInquiryService.signIn(memberId, password)
+                    val expectedResult = Token(accessToken, refreshToken)
+
+                    Assertions.assertEquals(expectedResult, realResult)
+                }
+            }
+        }
     }
 }
