@@ -144,5 +144,43 @@ class MemberCommandServiceTest : BehaviorSpec() {
                 }
             }
         }
+
+        Given("Member 정보와 password 정보가 주어진 경우") {
+            val memberInfo =
+                MemberInfoVO(memberId = "User1", memberName = "EditUserName", memberEmail = "EditUser@User.com")
+            val password = "password"
+
+            When("멤버 정보 저장할 때") {
+                val member = memberInfo.toMember()
+                member.password = password
+
+                every { passwordEncoder.encode(any()) } returns password
+
+                And("저장 실패할 때") {
+                    every { saveMemberPort.saveMember(member) } returns null
+
+                    Then("Exception 발생") {
+                        shouldThrowExactly<MemberException> {
+                            memberCommandService.saveMember(memberInfo, password)
+                        }.should { e ->
+                            e.exceptionCode shouldBe ExceptionCode.MEMBER_SAVE_ERROR
+                            e.message shouldBe ExceptionCode.MEMBER_SAVE_ERROR.message
+                        }
+                    }
+                }
+
+                And("저장 성공할 때") {
+                    every { saveMemberPort.saveMember(member) } returns member
+
+                    Then("저장된 정보 반환") {
+                        val expectedResult = MemberInfoVO.from(member)
+                        val realResult = memberCommandService.saveMember(memberInfo, password)
+
+                        realResult.memberName shouldBe expectedResult.memberName
+                        realResult.memberEmail shouldBe expectedResult.memberEmail
+                    }
+                }
+            }
+        }
     }
 }
