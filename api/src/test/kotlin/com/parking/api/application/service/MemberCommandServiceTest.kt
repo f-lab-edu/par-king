@@ -6,8 +6,12 @@ import com.parking.api.application.vo.MemberInfoVO
 import com.parking.domain.entity.Member
 import com.parking.domain.entity.MemberInfo
 import com.parking.domain.exception.MemberException
+import com.parking.domain.exception.enum.ExceptionCode
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -89,6 +93,54 @@ class MemberCommandServiceTest : BehaviorSpec() {
                     val expectedResult = MemberInfoVO.from(member)
 
                     Assertions.assertEquals(expectedResult, realResult)
+                }
+            }
+        }
+
+        Given("memberInfo 가 주어진 경우") {
+            val memberInfo =
+                MemberInfoVO(memberId = "User1", memberName = "EditUserName", memberEmail = "EditUser@User.com")
+
+            When("수정 때") {
+                And("DB 정보가 없을 때") {
+
+                    every { findMemberPort.findMemberInfoByMemberId(any()) } returns null
+
+                    Then("Exception 발생") {
+                        shouldThrowExactly<MemberException>{
+                            memberCommandService.modify(memberInfo)
+                        }.should {e ->
+                            e.exceptionCode shouldBe ExceptionCode.MEMBER_NOT_FOUND
+                            e.message shouldBe ExceptionCode.MEMBER_NOT_FOUND.message
+                        }
+
+                    }
+                }
+
+                And("수정이 정상적으로 되는 경우") {
+                    val member = Member(
+                        id = 1L, password = "password",
+                        memberInfo = MemberInfo(memberId = "User1", name = "UserName", email = "User@User.com")
+                    )
+
+                    val editedMember = Member(
+                        id = 1L, password = "password",
+                        memberInfo = MemberInfo(
+                            memberId = "User1",
+                            name = memberInfo.memberName,
+                            email = memberInfo.memberEmail
+                        )
+                    )
+
+                    every { findMemberPort.findMemberInfoByMemberId(any()) } returns member
+                    every { saveMemberPort.saveMember(any()) } returns editedMember
+
+                    Then("수정된 정보로 반환") {
+                        val realResult = memberCommandService.modify(memberInfo)
+
+                        realResult.memberName shouldBe memberInfo.memberName
+                        realResult.memberEmail shouldBe memberInfo.memberEmail
+                    }
                 }
             }
         }
