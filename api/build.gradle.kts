@@ -12,4 +12,5 @@ dependencies {
     implementation("com.auth0:java-jwt:4.4.0")
     implementation(project(":domain"))
     api(project(":persistence"))
+    testImplementation("org.springframework.security:spring-security-test")
 }
