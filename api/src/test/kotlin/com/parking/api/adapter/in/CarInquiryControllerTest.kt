@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.parking.api.adapter.`in`.dto.ResponseCarInfoDTO
 import com.parking.api.application.port.`in`.car.FindCarUseCase
 import com.parking.api.application.vo.ResponseCarInfoVO
+import com.parking.api.common.advice.ParkingAdvice
+import com.parking.api.common.dto.ExceptionResponseDTO
 import com.parking.api.common.dto.SuccessResponseDTO
+import com.parking.domain.exception.CarException
+import com.parking.domain.exception.enum.ExceptionCode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -29,8 +33,12 @@ class CarInquiryControllerTest(
 
         this.beforeTest {
             mockMvc = MockMvcBuilders.standaloneSetup(
-                CarInquiryController(findCarUseCase)
-            ).build()
+                    CarInquiryController(findCarUseCase)
+                )
+                .setControllerAdvice(
+                    ParkingAdvice::class.java
+                )
+                .build()
         }
 
         this.describe("CarInquiryController Test") {
@@ -61,6 +69,29 @@ class CarInquiryControllerTest(
 
                     responseContent.carNumber shouldBe responseCarInfo.carNumber
                     result.response.status shouldBe HttpStatus.OK.value()
+                }
+
+                it("carId로 못찾았을 때") {
+
+                    every { findCarUseCase.findById(any()) } throws CarException(
+                        ExceptionCode.CAR_NOT_FOUND,
+                        ExceptionCode.CAR_NOT_FOUND.message
+                    )
+
+                    val result = mockMvc.perform(
+                        get("/car/find/$carId")
+
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+                    val responseBody =
+                        objectMapper.readValue(result.response.contentAsByteArray, ExceptionResponseDTO::class.java)
+
+
+                    responseBody.code shouldBe ExceptionCode.CAR_NOT_FOUND
+                    responseBody.content shouldBe ExceptionCode.CAR_NOT_FOUND.message
                 }
             }
         }
