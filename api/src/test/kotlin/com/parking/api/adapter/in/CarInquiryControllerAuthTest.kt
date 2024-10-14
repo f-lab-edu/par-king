@@ -14,6 +14,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver
@@ -49,6 +50,7 @@ class CarInquiryControllerAuthTest {
 
     @Test
     @WithMockUser
+    @DisplayName("memberId 로 현재 자신이 보유한 자동차 리스트 목록 반환 확인 테스트")
     fun carInquiryAuthTest() {
         val responseCarInfo = ResponseCarInfoVO(
             1L,
@@ -70,7 +72,7 @@ class CarInquiryControllerAuthTest {
 
         val responseList = objectMapper.writeValueAsString(responseBody.content).toObjectList<ResponseCarInfoDTO>()
 
-        responseList.forEach { it ->
+        responseList.forEach {
             it.carNumber shouldBe responseCarInfo.carNumber
         }
     }
