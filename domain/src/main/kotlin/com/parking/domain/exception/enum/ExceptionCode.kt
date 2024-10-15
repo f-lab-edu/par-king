@@ -26,5 +26,8 @@ enum class ExceptionCode(
     DIBS_ON_PARKING_LOT_NOT_AVAILABLE("현재 찜 기능을 이용할 수 없는 상태입니다."),
 
     //NoShow 관련
-    NO_SHOW_INVALID_REQUEST("잘못 요청된 No Show 요청입니다.")
+    NO_SHOW_INVALID_REQUEST("잘못 요청된 No Show 요청입니다."),
+
+    //SUCCESS
+    SUCCESS("성공")
 }

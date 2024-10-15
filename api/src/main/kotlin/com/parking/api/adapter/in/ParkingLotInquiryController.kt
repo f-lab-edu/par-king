@@ -3,6 +3,7 @@ package com.parking.api.adapter.`in`
 import com.parking.api.adapter.`in`.dto.ParkingLotListInfoDTO
 import com.parking.api.adapter.`in`.dto.ParkingLotLocationDTO
 import com.parking.api.application.port.`in`.parkingLot.FindParkingLotUseCase
+import com.parking.api.common.dto.PageContentDTO
 import com.parking.api.common.dto.SuccessResponseDTO
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -37,11 +38,11 @@ class ParkingLotInquiryController(
     fun findParkingLots(
         @RequestBody location: ParkingLotLocationDTO,
         @RequestParam page: Int, @RequestParam size: Int
-    ): SuccessResponseDTO<Page<ParkingLotListInfoDTO>> {
+    ): PageContentDTO<List<ParkingLotListInfoDTO>> {
         val parkingLotList =
             findParkingLotUseCase.findAllByLocation(location.to(), PageRequest.of(page, size))
                 .map { ParkingLotListInfoDTO.from(it) }
 
-        return SuccessResponseDTO.success(parkingLotList)
+        return PageContentDTO.success(parkingLotList.content, parkingLotList.number, parkingLotList.totalPages)
     }
 }
