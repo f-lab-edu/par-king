@@ -1,15 +1,18 @@
 package com.parking.api.adapter.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
 import com.parking.api.application.port.`in`.member.FindMemberUseCase
 import com.parking.api.application.port.`in`.member.RefreshAccessToken
 import com.parking.api.application.port.`in`.member.SignInMemberUseCase
+import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.advice.ParkingAdvice
 import com.parking.api.common.dto.SuccessResponseDTO
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import io.mockk.mockk
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -42,12 +45,17 @@ class MemberInquiryControllerTest(
         this.describe("MemberInquiryController Test") {
             context("멤버 정보를 가져오는 경우") {
                 val memberId = "memberId"
+                val memberInfo = MemberInfoVO(
+                    "memberId",
+                    "name",
+                    "email@email.com"
+                )
+
+                every { findMemberUseCase.findMemberInfoByMemberId(any()) } returns memberInfo
 
                 it("멤버 정보를 반환해야 한다.") {
                     val result = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/member/info")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(memberId))
+                        MockMvcRequestBuilders.get("/member/info?memberId=$memberId")
                     )
                             .andDo(MockMvcResultHandlers.print())
                             .andExpect(MockMvcResultMatchers.status().isOk)
@@ -56,6 +64,13 @@ class MemberInquiryControllerTest(
                     val responseBody =
                         objectMapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
 
+
+                    val realResult =
+                        objectMapper.convertValue(responseBody.content, MemberInfoResponseDTO::class.java)
+
+                    val expectedResult = MemberInfoResponseDTO.from(memberInfo)
+
+                    realResult shouldBe expectedResult
                 }
             }
         }
