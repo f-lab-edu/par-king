@@ -8,11 +8,13 @@ import com.parking.api.application.port.`in`.member.SignInMemberUseCase
 import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.advice.ParkingAdvice
 import com.parking.api.common.dto.SuccessResponseDTO
+import com.parking.api.common.jwt.Token
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -71,6 +73,39 @@ class MemberInquiryControllerTest(
                     val expectedResult = MemberInfoResponseDTO.from(memberInfo)
 
                     realResult shouldBe expectedResult
+                }
+            }
+
+            context("refresh token 을 가져오는 경우") {
+                val token = Token(
+                    "accessToken",
+                    "refreshToken"
+                )
+                val outToken = Token(
+                    "outAccessToken",
+                    "outRefreshToken"
+                )
+
+                every { refreshAccessToken.refreshAccessToken(any()) } returns outToken
+
+                it("토큰 정보를 반환해야 한다.") {
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/member/refresh")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(token))
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+                    val responseBody =
+                        objectMapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+
+                    val realResult =
+                        objectMapper.convertValue(responseBody.content, Token::class.java)
+
+                    realResult shouldBe outToken
                 }
             }
         }
