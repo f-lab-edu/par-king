@@ -2,6 +2,7 @@ package com.parking.api.adapter.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
+import com.parking.api.adapter.`in`.dto.SignInDTO
 import com.parking.api.application.port.`in`.member.FindMemberUseCase
 import com.parking.api.application.port.`in`.member.RefreshAccessToken
 import com.parking.api.application.port.`in`.member.SignInMemberUseCase
@@ -93,6 +94,41 @@ class MemberInquiryControllerTest(
                         MockMvcRequestBuilders.get("/member/refresh")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(token))
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+                    val responseBody =
+                        objectMapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+
+                    val realResult =
+                        objectMapper.convertValue(responseBody.content, Token::class.java)
+
+                    realResult shouldBe outToken
+                }
+            }
+
+            context("sign-in 을 하는 경우") {
+                val signIn = SignInDTO(
+                    "memberId",
+                    "password"
+                )
+
+                val outToken = Token(
+                    "outAccessToken",
+                    "outRefreshToken"
+                )
+
+
+                every { signInMemberUseCase.signIn(any(), any()) } returns outToken
+
+                it("토큰 정보를 반환해야 한다.") {
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.get("/member/sign-in")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(signIn))
                     )
                         .andDo(MockMvcResultHandlers.print())
                         .andExpect(MockMvcResultMatchers.status().isOk)
