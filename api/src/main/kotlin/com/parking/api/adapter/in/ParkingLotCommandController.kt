@@ -19,7 +19,7 @@ class ParkingLotCommandController(
     fun create(
         @RequestBody parkingLotInfo: ParkingLotInfoDTO
     ): SuccessResponseDTO<ParkingLotInfoDTO> {
-        return SuccessResponseDTO.success(ParkingLotInfoDTO.from(createParkingLotUseCase.create(parkingLotInfo.to())))
+        return SuccessResponseDTO.success(ParkingLotInfoDTO.from(createParkingLotUseCase.create(parkingLotInfo.toVO())))
     }
 
     @DeleteMapping("/delete/{parkingLotId}")
@@ -36,6 +36,6 @@ class ParkingLotCommandController(
     fun modify(
         @RequestBody parkingLotInfo: ParkingLotInfoDTO
     ): SuccessResponseDTO<ParkingLotInfoDTO> {
-        return SuccessResponseDTO.success(ParkingLotInfoDTO.from(modifyParkingLotUseCase.modify(parkingLotInfo.to())))
+        return SuccessResponseDTO.success(ParkingLotInfoDTO.from(modifyParkingLotUseCase.modify(parkingLotInfo.toVO())))
     }
 }

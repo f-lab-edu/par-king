@@ -17,7 +17,7 @@ data class ParkingLotInfoDTO(
     val cityName: String,
     val guName: String
 ) {
-    fun to() = ParkingLotInfoVO(
+    fun toVO() = ParkingLotInfoVO(
         memberId, parkingLotId, name, fullAddress, totalSpace, occupiedSpace, cost, extraCost, cityName, guName
     )
 
