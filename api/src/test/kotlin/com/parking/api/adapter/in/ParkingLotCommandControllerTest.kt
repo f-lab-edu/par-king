@@ -70,7 +70,6 @@ class ParkingLotCommandControllerTest(
                     val responseBody =
                         mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
 
-
                     val realResult =
                         mapper.convertValue(responseBody.content, ParkingLotInfoDTO::class.java)
 
@@ -95,6 +94,40 @@ class ParkingLotCommandControllerTest(
                         mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
 
                     responseBody.content shouldBe true
+                }
+            }
+
+            context("수정하는 경우") {
+                val parkingLotInfoVO = ParkingLotInfoVO(
+                    "User1",
+                    parkingLotId = 1L,
+                    name = "주차장1",
+                    totalSpace = 10L,
+                    cityName = "Seoul",
+                    guName = "Gang-nam"
+                )
+                val parkingLotInfoDTO = ParkingLotInfoDTO.from(parkingLotInfoVO)
+
+                every { modifyParkingLotUseCase.modify(any()) } returns parkingLotInfoVO
+
+                it("수정된 값 반환") {
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/parking-lot/modify")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(parkingLotInfoDTO))
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+
+                    val responseBody =
+                        mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+                    val realResult =
+                        mapper.convertValue(responseBody.content, ParkingLotInfoDTO::class.java)
+
+                    realResult shouldBe parkingLotInfoDTO
                 }
             }
         }
