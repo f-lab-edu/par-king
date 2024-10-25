@@ -3,6 +3,7 @@ package com.parking.api.adapter.`in`
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.parking.api.adapter.common.StringUtil.toObjectList
+import com.parking.api.adapter.common.WithMockUser
 import com.parking.api.adapter.`in`.dto.ParkingLotListInfoDTO
 import com.parking.api.adapter.`in`.dto.ParkingLotLocationDTO
 import com.parking.api.application.port.`in`.parkingLot.FindParkingLotUseCase
@@ -72,6 +73,47 @@ class ParkingLotInquiryControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(mapper.writeValueAsString(location))
             )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
+
+        val responseBody =
+            mapper.readValue(result.response.contentAsString, PageContentDTO::class.java)
+
+        val convertPageResult = mapper.writeValueAsString(responseBody.content).toObjectList<ParkingLotListInfoDTO>()
+
+        val expectedResult = listOf(ParkingLotListInfoDTO.from(parkingLotInfo))
+
+        expectedResult.forEachIndexed{idx, it ->
+            it.cityName shouldBe convertPageResult[idx].cityName
+            it.guName shouldBe convertPageResult[idx].guName
+            it.name shouldBe convertPageResult[idx].name
+            it.occupiedSpace shouldBe convertPageResult[idx].occupiedSpace
+            it.totalSpace shouldBe convertPageResult[idx].totalSpace
+        }
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("멤버를 대상으로 주차장 정보 반환 테스트")
+    fun findByMember() {
+        val memberId = "test1011"
+        val parkingLotInfo = ParkingLotListInfoVO(
+            1L,
+            "parkinglot1",
+            "Seoul",
+            "gang-nam",
+            10L,
+            40L
+        )
+        val page = PageRequest.of(0, 5)
+        val pageResult = PageImpl(listOf(parkingLotInfo), page, 1L)
+
+        every { findParkingLotUseCase.findAllByMemberId(any(), any(), any()) } returns pageResult
+
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/parking-lot/find/member?memberId=${memberId}&page=0&size=5")
+        )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andReturn()
