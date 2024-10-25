@@ -56,7 +56,7 @@ class ParkingLotCommandControllerTest(
 
                 every { createParkingLotUseCase.create(any()) } returns parkingLotInfoVO
 
-                it("생성한 경우가 나와야 한다.") {
+                it("생성한 정보가 나와야 한다.") {
                     val result = mockMvc.perform(
                         MockMvcRequestBuilders.post("/parking-lot/create")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -75,6 +75,26 @@ class ParkingLotCommandControllerTest(
                         mapper.convertValue(responseBody.content, ParkingLotInfoDTO::class.java)
 
                     realResult shouldBe parkingLotInfoDTO
+                }
+            }
+
+            context("삭제하는 경우") {
+
+                every { deleteParkingLotUseCase.delete(any()) } returns mockk()
+
+                it("true 반환") {
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/parking-lot/delete/1")
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isAccepted)
+                        .andReturn()
+
+
+                    val responseBody =
+                        mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+                    responseBody.content shouldBe true
                 }
             }
         }
