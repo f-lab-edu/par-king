@@ -32,5 +32,17 @@ class MemberCommandControllerTest(
                 )
                 .build()
         }
+
+        this.describe("MemberCommandController Test") {
+            context("가입하는 경우") {
+
+            }
+            context("회원 정보 수정하는 경우") {
+
+            }
+            context("탈퇴하는 경우") {
+
+            }
+        }
     }
 }
