@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.parking.api.application.port.`in`.member.ModifyMemberInfoUseCase
 import com.parking.api.application.port.`in`.member.RevokeMemberUseCase
 import com.parking.api.application.port.`in`.member.SaveMemberUseCase
+import com.parking.api.application.vo.MemberInfoVO
 import com.parking.api.common.advice.ParkingAdvice
 import io.kotest.core.spec.style.DescribeSpec
+import io.mockk.every
 import io.mockk.mockk
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -35,7 +37,18 @@ class MemberCommandControllerTest(
 
         this.describe("MemberCommandController Test") {
             context("가입하는 경우") {
+                val memberId = "memberId"
+                val memberInfo = MemberInfoVO(
+                    memberId = "memberId",
+                    memberName = "memberName",
+                    memberEmail = "email@email"
+                )
 
+                every { saveMemberUseCase.saveMember(any(), any()) } returns memberInfo
+
+                it("멤버 정보를 반환해야 한다.") {
+
+                }
             }
             context("회원 정보 수정하는 경우") {
 
