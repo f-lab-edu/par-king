@@ -1,6 +1,7 @@
 package com.parking.api.adapter.`in`
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.parking.api.adapter.`in`.dto.MemberInfoDTO
 import com.parking.api.adapter.`in`.dto.MemberInfoResponseDTO
 import com.parking.api.adapter.`in`.dto.SignUpDTO
 import com.parking.api.application.port.`in`.member.ModifyMemberInfoUseCase
@@ -86,7 +87,42 @@ class MemberCommandControllerTest(
                 }
             }
             context("회원 정보 수정하는 경우") {
+                val memberInfoDTO = MemberInfoDTO(
+                    memberId = "memberId",
+                    memberName = "memberName2",
+                    memberEmail = "email@email"
+                )
+                val memberInfo = MemberInfoVO(
+                    memberId = "memberId",
+                    memberName = "memberName2",
+                    memberEmail = "email@email"
+                )
 
+                every { modifyMemberInfoUseCase.modify(any()) } returns memberInfo
+
+                it("수정된 멤버 정보를 반환해야 한다.") {
+                    val expectedResult = MemberInfoResponseDTO(
+                        memberInfo.memberId, memberInfo.memberName, memberInfo.memberEmail
+                    )
+
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/member/modify")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(mapper.writeValueAsString(memberInfoDTO))
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+                    val responseBody =
+                        mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+
+                    val realResult =
+                        mapper.convertValue(responseBody.content, MemberInfoResponseDTO::class.java)
+
+                    realResult shouldBe expectedResult
+                }
             }
             context("탈퇴하는 경우") {
 
