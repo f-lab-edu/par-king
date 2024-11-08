@@ -125,7 +125,24 @@ class MemberCommandControllerTest(
                 }
             }
             context("탈퇴하는 경우") {
+                val memberId = "1"
 
+                every { revokeMemberUseCase.revoke(any()) } returns mockk()
+
+                it("탈퇴 후 성공을 리턴해야 한다.") {
+
+                    val result = mockMvc.perform(
+                        MockMvcRequestBuilders.post("/member/revoke?memberId=${memberId}")
+                    )
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk)
+                        .andReturn()
+
+                    val responseBody =
+                        mapper.readValue(result.response.contentAsByteArray, SuccessResponseDTO::class.java)
+
+                    responseBody.content shouldBe true
+                }
             }
         }
     }
